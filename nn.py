@@ -17,6 +17,7 @@ class NeuralNetwork:
         self.layers = [
             Layer(self.n_features, self.neurons_per_hidden_layer),
         ]
+
         self.results = None
 
 
@@ -42,16 +43,34 @@ class NeuralNetwork:
                               self.categories)
 
         self.results = results_layer.forward(curr_inputs)
-        print(f"Layer [{i+1}] Neurons: {len(self.results)}")
+        print(f"Layer [{i+2}] Neurons: {len(self.results)}")
         self.cost()
 
         return self.results
 
     
-    def cost(self):
+    def convert_expected(self):
+        """
+        Converts the vector of expected results
+        to a matrix, based on the neurons of the last layer.
+        E.g. the neurons of the output layer are 3, the 
+        expected results' vector will be converted from
+        to m x 3, where m is the number of the expected results.
+        """
         expected_converted = np.zeros((
             len(self.expected_output),
             len(self.results[0]) 
         ))
 
-        print(expected_converted)
+
+        for i, output in enumerate(self.expected_output):
+            expected_converted[i][output] = 1
+
+        self.expected_output = expected_converted
+
+
+    def cost(self):
+        self.convert_expected()
+        
+        errors_total = (1 / 2)* (self.expected_output - self.results) ** 2
+        errors_total = errors_total.mean(axis=1)
