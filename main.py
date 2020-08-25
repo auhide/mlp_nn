@@ -1,7 +1,8 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
-from network.nn import NeuralNetwork
+# from network.nn import NeuralNetwork
+from overlays import FFNeuralNetwork
 from template_data import X, y
 
 
@@ -14,9 +15,13 @@ def visualize_data(X=X, y=y):
 
 
 if __name__ == "__main__":
-    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    y = np.array([0, 0, 0, 1])
+    # X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    # y = np.array([0, 0, 0, 1])
 
-
-    y_pred = NeuralNetwork(X, y, hidden_layers=2, hidden_neurons=3, epochs=10000).predict()
-    print("Final Output:", y_pred)
+    model = FFNeuralNetwork().train(X, y,
+                                    hidden_layers=4, 
+                                    hidden_neurons=4,
+                                    l_rate=0.5,
+                                    random=0,
+                                    rmse_threshold=0.25)
+    print(model.predict())

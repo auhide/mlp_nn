@@ -1,5 +1,5 @@
 import numpy as np
-np.random.seed(0)
+
 
 class Layer:
     """
@@ -10,7 +10,9 @@ class Layer:
         n_neurons (int): Number of layer neurons
     """
 
-    def __init__(self, n_inputs, n_neurons):
+    def __init__(self, n_inputs, n_neurons, random=0):
+        np.random.seed(random)
+
         self.weights = np.random.randn(n_inputs, n_neurons)
         self.biases = np.zeros((1, n_neurons))
 
@@ -42,12 +44,12 @@ class Layer:
 
     @activation("sigm")
     def forward(self, inputs):
-        print("Inputs Shape: ", inputs.shape)
-        print("Weights Shape: ", self.weights.shape)
+        # print("Inputs Shape: ", inputs.shape)
+        # print("Weights Shape: ", self.weights.shape)
         self.inputs = inputs
         self.output = np.dot(inputs, self.weights) + self.biases
-        print("Outputs Shape: ", self.output.shape)
-        print("----")
+        # print("Outputs Shape: ", self.output.shape)
+        # print("----")
 
 
 

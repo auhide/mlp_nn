@@ -2,31 +2,25 @@ import numpy as np
 
 from network.layers import Layer
 
-np.random.seed(0)
 
 
 class NeuralNetwork:
 
-    def __init__(self, X=None, y=None, 
-                 hidden_layers=1, hidden_neurons=5, epochs=10000, l_rate=0.5,
-                 rmse_threshold=0.03):
+    def __init__(self, X, y, **kwargs):
+        self.__dict__.update(kwargs)
+        
         self.inputs = X
         self.expected_output = y
         self.categories = len(set(y))
         self.results = None
 
-
-        self.l_rate = l_rate    
-        self.hidden_layers = hidden_layers
-        self.hidden_neurons = hidden_neurons
-        self.epochs = epochs
-        self.threshold = rmse_threshold
+        np.random.seed(self.random)
 
         # Adding the first layer
         self.layers = [
-            Layer(len(X[0]), self.hidden_neurons),
+            Layer(len(X[0]), self.hidden_neurons, random=self.random),
         ]
-        if hidden_layers > 1:
+        if self.hidden_layers > 1:
             self._initialize_hidden_layers()
 
 
@@ -34,22 +28,21 @@ class NeuralNetwork:
         
         for i in range(self.hidden_layers - 2):
             self.layers.append(Layer(self.hidden_neurons, 
-                                     self.hidden_neurons))
+                                     self.hidden_neurons, 
+                                     self.random))
             
         self.layers.append(Layer(self.hidden_neurons, 
-                                 self.categories))
-
-        print(self.layers)
+                                 self.categories, 
+                                 self.random))
 
 
     def _forward_prop(self):
         next_input = self.inputs
 
         for i in range(self.hidden_layers):
-            print("Forwarding Layer: ", i)
+            # print("Forwarding Layer: ", i)
             self.layers[i].forward(next_input)
             next_input = self.layers[i].output
-            # next_input = self.layers[i+1].forward(self.layers[i].output)
 
         self.results = next_input
 
@@ -80,13 +73,12 @@ class NeuralNetwork:
     def predict(self):
         curr_epoch = 0
 
-        # for curr_epoch in range(self.epochs):
         while True:
             self._back_prop(curr_epoch)
             curr_rmse = self.get_global_error()
             
             print(f"RMSE: {curr_rmse}")
-            if curr_rmse < self.threshold:
+            if curr_rmse < self.rmse_threshold:
                 break
 
             curr_epoch += 1
@@ -99,8 +91,8 @@ class NeuralNetwork:
         print(f"Epoch: {curr_epoch}")
         if curr_epoch > 0:
             self.results = self._forward_prop()
-            print("Result: ", self.results.shape)
-            print(self.results)
+            # print("Result: ", self.results.shape)
+            # print(self.results)
         else:
             self._forward_prop()
         
@@ -108,11 +100,11 @@ class NeuralNetwork:
             self._convert_expected()
 
 
-        print("\nBackpropagating...")
+        # print("\nBackpropagating...")
         for i in reversed(range(len(self.layers))):
             curr_layer = self.layers[i]
 
-            print("Layer:", i)
+            # print("Layer:", i)
             # Creating the deltas for the last layer
             if curr_layer == self.layers[-1]:
                 curr_layer.errors = self.expected_output - self.results
@@ -129,13 +121,13 @@ class NeuralNetwork:
 
     def _update_weights(self):
         
-        print("\nUpdating Weights...")
+        # print("\nUpdating Weights...")
         for i in range(len(self.layers)):
-            print("Layer:", i)
+            # print("Layer:", i)
             curr_layer = self.layers[i]
 
             input_to_use = np.atleast_2d(self.inputs if i == 0 else self.layers[i-1].output)
-            
+
             change = curr_layer.deltas.T.dot(input_to_use) * self.l_rate
             curr_layer.weights += change.T
 
