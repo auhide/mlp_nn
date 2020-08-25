@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
+import numpy as np
 
-from nn import NeuralNetwork
+from network.nn import NeuralNetwork
 from template_data import X, y
 
 
@@ -13,7 +14,9 @@ def visualize_data(X=X, y=y):
 
 
 if __name__ == "__main__":
-    y_pred = NeuralNetwork(X, y).forward_prop()
+    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y = np.array([0, 0, 0, 1])
+
+
+    y_pred = NeuralNetwork(X, y).predict()
     # print(y_pred)
-    print("\n\n")
-    # print(y)

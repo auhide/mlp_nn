@@ -1,5 +1,5 @@
 import numpy as np
-
+np.random.seed(0)
 
 class Layer:
     """
@@ -12,7 +12,6 @@ class Layer:
 
     def __init__(self, n_inputs, n_neurons):
         self.weights = np.random.randn(n_inputs, n_neurons)
-        # print(f"WEIGHTS: {self.weights}\n\n")
         self.biases = np.zeros((1, n_neurons))
 
 
@@ -43,7 +42,16 @@ class Layer:
 
     @activation("sigm")
     def forward(self, inputs):
+        print("Inputs Shape: ", inputs.shape)
+        print("Weights Shape: ", self.weights.shape)
+        self.inputs = inputs
         self.output = np.dot(inputs, self.weights) + self.biases
+        print("Outputs Shape: ", self.output.shape)
+        print("----")
 
 
 
+    def activation_derivative(self):
+        # In this case we will only implement for a Sigmoid function
+        return self.output * (1 - self.output)
+        
