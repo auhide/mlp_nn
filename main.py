@@ -18,5 +18,5 @@ if __name__ == "__main__":
     y = np.array([0, 0, 0, 1])
 
 
-    y_pred = NeuralNetwork(X, y).predict()
-    # print(y_pred)
+    y_pred = NeuralNetwork(X, y, hidden_layers=2, hidden_neurons=3, epochs=10000).predict()
+    print("Final Output:", y_pred)
