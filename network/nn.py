@@ -52,19 +52,21 @@ class NeuralNetwork:
         to a matrix, based on the neurons of the last layer.
 
         E.g. the neurons of the output layer are 3, the 
-        expected results' vector will be converted from
-        to mx3, where m is the number of the expected results.
+        expected results' vector will be converted to mx3,
+        where m is the number of the expected results.
         """
         expected_converted = np.zeros((
             len(self.expected_output),
-            len(self.results[0]) 
+            len(self.results[0])
         ))
-
+        print(f"Expected: {self.expected_output}")
 
         for i, output in enumerate(self.expected_output):
+            print(f"i={i} ; output={output}")
             expected_converted[i][output] = 1
 
         self.expected_output = expected_converted
+        print(f"Changed Expected: {self.expected_output}")
 
 
     def predict(self):

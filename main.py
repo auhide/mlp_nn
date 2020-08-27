@@ -39,7 +39,10 @@ if __name__ == "__main__":
     # X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     # y = np.array([0, 0, 0, 1])
 
+
     X_train, y_train, X_test, y_test = preprocess(X, y)
+    # X_train = np.array([[ 0.16486876, 0.18793162], [ 0.41615746, -0.27715153]])
+    # y_train = np.array([1, 1])
 
     model = SGDNeuralNetwork().fit(X_train, y_train,
                                    hidden_layers=4, 
@@ -47,9 +50,9 @@ if __name__ == "__main__":
                                    l_rate=0.5,
                                    random=0,
                                    rmse_threshold=0.25)
-    y_pred = model.predict(X_train)
-    print("Data Size:", len(X))
-    print("Expected :", y_train)
-    print("Predicted:", y_pred)
-    print(f"Error:", error(y, y_pred))
+    # y_pred = model.predict(X_train)
+    # print("Data Size:", len(X))
+    # print("Expected :", y_train)
+    # print("Predicted:", y_pred)
+    # print(f"Error:", error(y, y_pred))
 
