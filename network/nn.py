@@ -14,8 +14,6 @@ class NeuralNetwork:
         self.categories = len(set(y))
         self.results = None
 
-        np.random.seed(self.random)
-
         # Adding the first layer
         self.layers = [
             Layer(len(X[0]), self.hidden_neurons, random=self.random),
@@ -35,16 +33,15 @@ class NeuralNetwork:
                                  self.categories, 
                                  self.random))
 
-
-    def _forward_prop(self):
-        next_input = self.inputs
+    
+    def forward_prop(self, layer_input):
 
         for i in range(self.hidden_layers):
             # print("Forwarding Layer: ", i)
-            self.layers[i].forward(next_input)
-            next_input = self.layers[i].output
+            self.layers[i].forward(layer_input)
+            layer_input = self.layers[i].output
 
-        self.results = next_input
+        self.results = layer_input
 
         return self.results
 
@@ -75,26 +72,26 @@ class NeuralNetwork:
 
         while True:
             self._back_prop(curr_epoch)
-            curr_rmse = self.get_global_error()
+            curr_rmse = self.get_rmse()
+            curr_mse = self.get_mse()
             
-            print(f"RMSE: {curr_rmse}")
+            print(f"epoch: {curr_epoch}; rmse: {curr_rmse}, mse: {curr_mse}")
             if curr_rmse < self.rmse_threshold:
                 break
 
             curr_epoch += 1
 
-        return self.layers[-1].output
+        return self, self.layers[-1].output
 
 
     def _back_prop(self, curr_epoch):
         
-        print(f"Epoch: {curr_epoch}")
         if curr_epoch > 0:
-            self.results = self._forward_prop()
+            self.results = self.forward_prop(self.inputs)
             # print("Result: ", self.results.shape)
             # print(self.results)
         else:
-            self._forward_prop()
+            self.forward_prop(self.inputs)
         
         if curr_epoch == 0:
             self._convert_expected()
@@ -132,7 +129,13 @@ class NeuralNetwork:
             curr_layer.weights += change.T
 
 
-    def get_global_error(self):
+    def get_rmse(self):
         output_matrix = self.layers[-1].output
 
         return np.sqrt(np.mean((output_matrix - self.expected_output) ** 2))
+
+
+    def get_mse(self):
+        output_matrix = self.layers[-1].output
+
+        return np.mean((output_matrix - self.expected_output) ** 2)

@@ -10,10 +10,8 @@ class Layer:
         n_neurons (int): Number of layer neurons
     """
 
-    def __init__(self, n_inputs, n_neurons, random=0):
-        np.random.seed(random)
-
-        self.weights = np.random.randn(n_inputs, n_neurons)
+    def __init__(self, n_inputs, n_neurons, random=None):
+        self.weights = random.randn(n_inputs, n_neurons)
         self.biases = np.zeros((1, n_neurons))
 
 
