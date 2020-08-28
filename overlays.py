@@ -15,24 +15,23 @@ class SGDNeuralNetwork:
             l_rate=0.5, rmse_threshold=0.03, random=0):
         self.X = X
         self.y = y
+        self.categories = len(set(y))
+        
         self.hidden_layers = hidden_layers
         self.hidden_neurons = hidden_neurons
         self.l_rate = l_rate
         self.rmse_threshold = rmse_threshold
         self.seed = np.random.RandomState(random)
+        
         self.nns = []
 
         X_separated = self.split_by_two(self.X)
         y_separated = self.split_by_two(self.y)
-        print(y_separated)
-        counter = 0
 
         for curr_X, curr_y in zip(X_separated, y_separated):
-            print(counter)
-            counter += 1
-            print(curr_X)
-            print(curr_y)
             curr_nn = self.fit_single(curr_X, curr_y)
+            print("Expected:", curr_y)
+            print("Prediction:", curr_nn.forward_prop(curr_y))
             self.nns.append(curr_nn)
 
         print(self.nns)
@@ -41,7 +40,7 @@ class SGDNeuralNetwork:
 
 
     def fit_single(self, X, y):
-        nn, result = NeuralNetwork(X, y, 
+        nn, result = NeuralNetwork(X, y, categories=self.categories,
                                     hidden_layers=self.hidden_layers,
                                     hidden_neurons=self.hidden_neurons, 
                                     l_rate=self.l_rate,

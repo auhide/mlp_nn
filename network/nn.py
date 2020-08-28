@@ -6,12 +6,12 @@ from network.layers import Layer
 
 class NeuralNetwork:
 
-    def __init__(self, X, y, **kwargs):
+    def __init__(self, X, y, categories, **kwargs):
         self.__dict__.update(kwargs)
         
         self.inputs = X
         self.expected_output = y
-        self.categories = len(set(y))
+        self.categories = categories
         self.results = None
 
         # Adding the first layer
