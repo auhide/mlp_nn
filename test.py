@@ -1,14 +1,18 @@
-def test_conversion():
-    expected_converted = np.zeros((
-        len(self.expected_output),
-        len(self.results[0])
-    ))
-    print(f"Expected: {self.expected_output}")
+lst1 = [[1, 2, 3, 4]]
+lst2 = [[2, 4, 4, 1]]
 
-    for i, output in enumerate(self.expected_output):
-        print(f"i={i} ; output={output}")
-        expected_converted[i][output] = 1
+import numpy as np
+lst3 = np.array(lst1 + lst2)
 
-    self.expected_output = expected_converted
+layer1 = [
+    [-0.03381733, -1.17946742, 0.52270334, -0.17829072], 
+    [ 0.79004842, 0.80196362, 2.16468256, 1.31795878]
+]
 
-list = []
+layer2 = [
+    [ 2.3833596, 0.94569991, -0.91437887, 1.1168085 ],
+    [-1.32075679, -0.47202273, -0.05667179, 1.71236684]
+]
+
+result_layer = np.array([layer1, layer2])
+print(result_layer.mean(axis=0))

@@ -57,7 +57,7 @@ class NeuralNetwork:
         """
         expected_converted = np.zeros((
             len(self.expected_output),
-            len(self.results[0])
+            self.categories
         ))
         print(f"Expected: {self.expected_output}")
 
