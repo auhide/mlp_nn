@@ -1,0 +1,3 @@
+
+class WrongLayerFormat(Exception):
+    pass
