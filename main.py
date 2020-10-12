@@ -42,16 +42,18 @@ if __name__ == "__main__":
     # y = np.array([0, 0, 0, 1])
 
 
-    # X_train, y_train, X_test, y_test = preprocess(X, y)
+    X_train, y_train, X_test, y_test = preprocess(X, y)
     X, y = shuffle_data(X, y)
 
-    model = SGDNeuralNetwork().fit(X, y,
+    model = SGDNeuralNetwork().fit(X, y, sgd=False, 
                                    hidden_layers=4, 
-                                   hidden_neurons=5,
+                                   hidden_neurons=4,
                                    l_rate=0.5,
                                    random=0,
                                    rmse_threshold=0.25)
     y_pred = model.predict(X)
+    # print("Predicted: ", y_pred)
+    # print("Real: ", y)
     print("\n\nData Size:", len(X))
     print("Expected :", y)
     print("Predicted:", y_pred)
