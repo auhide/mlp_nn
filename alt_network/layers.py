@@ -18,7 +18,8 @@ class Layer:
         return self.output
 
 
-    def sigmoid_activation(self, neurons):
+    @staticmethod
+    def sigmoid_activation(neurons):
         sigmoid = lambda x: 1/(1 + np.exp(-x))
         sigm = np.vectorize(sigmoid)
         neurons = sigm(neurons)

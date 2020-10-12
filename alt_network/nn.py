@@ -6,14 +6,13 @@ from exceptions import WrongLayerFormat
 
 class NeuralNetwork:
 
-    def __init__(self, X, y, hidden=1, hidden_neurons=3):
+    def __init__(self, X, y, learning_rate=0.5):
         self.X = X
         self.y = y
 
         self.input_neurons = len(X[0])
         self.output_neurons = len(set(y))
-        self.hidden_layers = hidden
-        self.hidden_neurons = hidden_neurons
+        self.l_rate = learning_rate
 
         self.layers = []
 
@@ -34,7 +33,30 @@ class NeuralNetwork:
                 prev_output = layer.forward(prev_output)
 
 
+    def backpropagation(self):
+        self.forward()
+        self.gradient_descent()
+
+
+    def get_deltas(self):
+        pass
+
+
+    def gradient_descent(self):
+
+        for layer in reversed(self.layers):
+            
+            if layer == self.layers[-1]:
+                
+
+
     def _output_layer_is_valid(self):
+        """True if the expected output layer's neurons are equal to the latest \
+        added layer's neurons, else - False
+
+        Returns:
+            bool: Whether the out layer is valid or not
+        """
         return self.layers[len(self.layers)-1].n_neurons == self.output_neurons
 
     
@@ -70,8 +92,8 @@ if __name__ == "__main__":
 
     nn = NeuralNetwork(X, y)
     
-    nn.add_layer(3)
-    nn.add_layer(3)
+    nn.add_layer(neurons=3)
+    nn.add_layer(neurons=3)
     nn.display_layers()
-    nn.forward()
+    nn.backpropagation()
     
