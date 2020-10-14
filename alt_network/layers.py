@@ -9,6 +9,8 @@ class Layer:
 
         self.weights = np.random.randn(n_inputs, n_neurons)
         self.biases = np.zeros((1, n_neurons))
+        # Will be calculated in the nn.py module
+        self.errors = None
 
 
     def forward(self, input_):
@@ -25,3 +27,12 @@ class Layer:
         neurons = sigm(neurons)
 
         return neurons
+
+
+    @staticmethod
+    def sigmoid_derivative(activation_outputs):
+        return activation_outputs * (1 - activation_outputs)
+
+
+    def create_deltas(self):
+        self.deltas = self.errors * self.sigmoid_derivative(self.output)
