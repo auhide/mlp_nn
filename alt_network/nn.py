@@ -8,7 +8,7 @@ from exceptions import WrongLayerFormat
 
 class NeuralNetwork:
 
-    def __init__(self, X, y, learning_rate=0.5):
+    def __init__(self, X, y, learning_rate=0.1):
         self.X = X
         self.y = y
 
@@ -20,8 +20,6 @@ class NeuralNetwork:
 
 
     def forward(self):
-        print(f"Input Neurons: {self.input_neurons}")
-        print(f"Output Neurons {self.output_neurons}")
 
         if not self._output_layer_is_valid():
             raise WrongLayerFormat(f"Last layer's neurons have to be {self.output_neurons}")
@@ -40,11 +38,16 @@ class NeuralNetwork:
     def backpropagation(self):
         self.forward()
         self._reformat_output()
-        self._gradient_descent()
+        
+        for _ in range(1000):
+            self._gradient_descent()
+
+        print(self.layers[-1].output)
+        
 
 
     def display_layers(self):
-        print(f"Layer[0]: (0, {self.input_neurons})")
+        print(f"Layer[0]: (1, {self.input_neurons})")
 
         for i in range(len(self.layers)):
             print(f"Layer[{i+1}]: ({self.layers[i].n_inputs}, {self.layers[i].n_neurons})")
@@ -67,7 +70,12 @@ class NeuralNetwork:
 
     
     def _update_weights(self):
-        pass
+        
+        for i in range(len(self.layers)):
+            curr_input = np.atleast_2d(self.X if i == 0 else self.layers[i-1].output)
+            weights_change = self.layers[i].deltas.T.dot(curr_input) * self.l_rate
+
+            self.layers[i].weights += weights_change.T
 
 
     def _gradient_descent(self):
@@ -78,13 +86,13 @@ class NeuralNetwork:
                 self.layers[i].errors = self.expected_output - self.output
                 self.layers[i].create_deltas()
 
-                print("Creating the deltas for the last layer")
-                print(self.layers[i].deltas)
-
             else:
                 next_layer = self.layers[i+1]
                 self.layers[i].errors = next_layer.deltas.dot(next_layer.weights.T)
                 self.layers[i].create_deltas()
+
+        self._update_weights()
+        self.forward()
 
 
     def _output_layer_is_valid(self):
@@ -122,6 +130,8 @@ class NeuralNetwork:
 
 
 if __name__ == "__main__":
+    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y = np.array([0, 0, 0, 1])
     print(X)
     print("\n")
     print(y)
@@ -130,7 +140,8 @@ if __name__ == "__main__":
     nn = NeuralNetwork(X, y)
     
     nn.add_layer(neurons=2)
-    nn.add_layer(neurons=3)
+    nn.add_layer(neurons=4)
+    nn.add_layer(neurons=2)
     nn.display_layers()
     nn.backpropagation()
     
