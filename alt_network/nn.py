@@ -18,7 +18,35 @@ class NeuralNetwork:
         self.layers = []
 
 
-    def forward(self):
+    def fit(self):
+        self._backpropagation()
+
+
+    def predict(self):
+        prediction = self._convert_as_prediction(self.layers[-1].output)
+        
+        return np.array(prediction)
+
+
+    @staticmethod
+    def _convert_as_prediction(raw_prediction):
+        result = []
+        print(raw_prediction)
+
+        for row in raw_prediction:
+            result.append(list(row).index(max(row)))
+
+        return result
+
+
+    def display_layers(self):
+        print(f"Layer[0]: (1, {self.input_neurons})")
+
+        for i in range(len(self.layers)):
+            print(f"Layer[{i+1}]: ({self.layers[i].n_inputs}, {self.layers[i].n_neurons})")
+
+
+    def _forward(self):
 
         if not self._output_layer_is_valid():
             raise WrongLayerFormat(f"Last layer's neurons have to be {self.output_neurons}")
@@ -34,24 +62,16 @@ class NeuralNetwork:
         self.output = self.layers[-1].output
 
 
-    def backpropagation(self):
-        self.forward()
+    def _backpropagation(self):
+        self._forward()
         self._reformat_output()
         
-        print(self.layers[-1].output)
+        # print(self.layers[-1].output)
 
-        for _ in range(5000):
+        for _ in range(1000):
             self._gradient_descent()
 
-        print(self.layers[-1].output)
-        
-
-
-    def display_layers(self):
-        print(f"Layer[0]: (1, {self.input_neurons})")
-
-        for i in range(len(self.layers)):
-            print(f"Layer[{i+1}]: ({self.layers[i].n_inputs}, {self.layers[i].n_neurons})")
+        # print(self.layers[-1].output)
 
 
     def add_layer(self, neurons):
@@ -93,7 +113,7 @@ class NeuralNetwork:
                 self.layers[i].create_deltas()
 
         self._update_weights()
-        self.forward()
+        self._forward()
 
 
     def _output_layer_is_valid(self):
@@ -119,10 +139,10 @@ class NeuralNetwork:
             len(self.y),
             self.output_neurons
         ))
-        print(f"Expected: {self.y}")
+        # print(f"Expected: {self.y}")
 
         for i, output in enumerate(self.y):
-            print(f"i={i} ; output={output}")
+            # print(f"i={i} ; output={output}")
             expected_converted[i][output] = 1
 
         self.expected_output = expected_converted

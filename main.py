@@ -19,6 +19,7 @@ def preprocess(X, y):
 if __name__ == "__main__":
     # X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     # y = np.array([0, 1, 1, 0])
+
     X, y = shuffle_data(X, y)
     X, y = X[:20], y[:20]
     X = X.astype(np.float128)
@@ -30,8 +31,11 @@ if __name__ == "__main__":
 
     nn = NeuralNetwork(X, y)
     
-    # nn.add_layer(neurons=4)
-    nn.add_layer(neurons=4)
+    nn.add_layer(neurons=3)
+    nn.add_layer(neurons=3)
+    nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
     nn.display_layers()
-    nn.backpropagation()
+    nn.fit()
+    prediction = nn.predict()
+    print(prediction)
