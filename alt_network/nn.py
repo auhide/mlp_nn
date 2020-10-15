@@ -7,15 +7,16 @@ from alt_network.exceptions import WrongLayerFormat
 
 class NeuralNetwork:
 
-    def __init__(self, X, y, learning_rate=0.5):
+    def __init__(self, X, y, learning_rate=0.5, epochs=100):
         self.X = X
         self.y = y
 
         self.input_neurons = len(X[0])
         self.output_neurons = len(set(y))
         self.l_rate = learning_rate
+        self.epochs = epochs
 
-        self.layers = []
+        self._layers = []
 
 
     def fit(self):
@@ -23,7 +24,7 @@ class NeuralNetwork:
 
 
     def predict(self):
-        prediction = self._convert_as_prediction(self.layers[-1].output)
+        prediction = self._convert_as_prediction(self._layers[-1].output)
         
         return np.array(prediction)
 
@@ -42,8 +43,8 @@ class NeuralNetwork:
     def display_layers(self):
         print(f"Layer[0]: (1, {self.input_neurons})")
 
-        for i in range(len(self.layers)):
-            print(f"Layer[{i+1}]: ({self.layers[i].n_inputs}, {self.layers[i].n_neurons})")
+        for i in range(len(self._layers)):
+            print(f"Layer[{i+1}]: ({self._layers[i].n_inputs}, {self._layers[i].n_neurons})")
 
 
     def _forward(self):
@@ -51,7 +52,7 @@ class NeuralNetwork:
         if not self._output_layer_is_valid():
             raise WrongLayerFormat(f"Last layer's neurons have to be {self.output_neurons}")
 
-        for i, layer in enumerate(self.layers):
+        for i, layer in enumerate(self._layers):
             
             if i == 0:
                 prev_output = layer.forward(self.X)
@@ -59,58 +60,54 @@ class NeuralNetwork:
             else:
                 prev_output = layer.forward(prev_output)
 
-        self.output = self.layers[-1].output
+        self.output = self._layers[-1].output
 
 
     def _backpropagation(self):
         self._forward()
         self._reformat_output()
-        
-        # print(self.layers[-1].output)
 
-        for _ in range(1000):
+        for _ in range(self.epochs):
             self._gradient_descent()
-
-        # print(self.layers[-1].output)
 
 
     def add_layer(self, neurons):
         
         # When adding the first layer
-        if not len(self.layers):
-            self.layers.append(
+        if not len(self._layers):
+            self._layers.append(
                 Layer(self.input_neurons, neurons)
             )
         
         # Adding all other layers
         else:
-            prev_layer_inputs = self.layers[len(self.layers)-1].n_neurons
-            self.layers.append(
+            prev_layer_inputs = self._layers[len(self._layers)-1].n_neurons
+            self._layers.append(
                 Layer(prev_layer_inputs, neurons)
             )
 
     
     def _update_weights(self):
         
-        for i in range(len(self.layers)):
-            curr_input = np.atleast_2d(self.X if i == 0 else self.layers[i-1].output)
-            weights_change = self.layers[i].deltas.T.dot(curr_input) * self.l_rate
+        for i in range(len(self._layers)):
+            curr_input = np.atleast_2d(self.X if i == 0 else self._layers[i-1].output)
+            weights_change = self._layers[i].deltas.T.dot(curr_input) * self.l_rate
 
-            self.layers[i].weights += weights_change.T
+            self._layers[i].weights += weights_change.T
 
 
     def _gradient_descent(self):
 
-        for i in reversed(range(len(self.layers))):
+        for i in reversed(range(len(self._layers))):
             
-            if self.layers[i] == self.layers[-1]:
-                self.layers[i].errors = self.expected_output - self.output
-                self.layers[i].create_deltas()
+            if self._layers[i] == self._layers[-1]:
+                self._layers[i].errors = self.expected_output - self.output
+                self._layers[i].create_deltas()
 
             else:
-                next_layer = self.layers[i+1]
-                self.layers[i].errors = next_layer.deltas.dot(next_layer.weights.T)
-                self.layers[i].create_deltas()
+                next_layer = self._layers[i+1]
+                self._layers[i].errors = next_layer.deltas.dot(next_layer.weights.T)
+                self._layers[i].create_deltas()
 
         self._update_weights()
         self._forward()
@@ -123,7 +120,7 @@ class NeuralNetwork:
         Returns:
             bool: Whether the out layer is valid or not
         """
-        return self.layers[len(self.layers)-1].n_neurons == self.output_neurons
+        return self._layers[len(self._layers)-1].n_neurons == self.output_neurons
 
     
     def _reformat_output(self):

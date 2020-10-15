@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # y = np.array([0, 1, 1, 0])
 
     X, y = shuffle_data(X, y)
-    X, y = X[:20], y[:20]
+    X, y = X[:10], y[:10]
     X = X.astype(np.float128)
     
     print(X)
@@ -29,9 +29,8 @@ if __name__ == "__main__":
     print(y)
     print("-"*100)
 
-    nn = NeuralNetwork(X, y)
+    nn = NeuralNetwork(X, y, epochs=3000)
     
-    nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
