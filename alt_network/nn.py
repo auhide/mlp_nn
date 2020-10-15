@@ -1,14 +1,13 @@
 import numpy as np
 
-from template_data import X, y
-from layers import Layer
-from exceptions import WrongLayerFormat
+from alt_network.layers import Layer
+from alt_network.exceptions import WrongLayerFormat
 
 
 
 class NeuralNetwork:
 
-    def __init__(self, X, y, learning_rate=0.1):
+    def __init__(self, X, y, learning_rate=0.5):
         self.X = X
         self.y = y
 
@@ -27,7 +26,7 @@ class NeuralNetwork:
         for i, layer in enumerate(self.layers):
             
             if i == 0:
-                prev_output = layer.forward(X)
+                prev_output = layer.forward(self.X)
             
             else:
                 prev_output = layer.forward(prev_output)
@@ -39,7 +38,9 @@ class NeuralNetwork:
         self.forward()
         self._reformat_output()
         
-        for _ in range(1000):
+        print(self.layers[-1].output)
+
+        for _ in range(5000):
             self._gradient_descent()
 
         print(self.layers[-1].output)
@@ -130,18 +131,4 @@ class NeuralNetwork:
 
 
 if __name__ == "__main__":
-    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    y = np.array([0, 0, 0, 1])
-    print(X)
-    print("\n")
-    print(y)
-    print("-"*100)
-
-    nn = NeuralNetwork(X, y)
-    
-    nn.add_layer(neurons=2)
-    nn.add_layer(neurons=4)
-    nn.add_layer(neurons=2)
-    nn.display_layers()
-    nn.backpropagation()
-    
+    pass

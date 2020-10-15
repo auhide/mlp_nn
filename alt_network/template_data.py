@@ -1,4 +1,4 @@
-from nnfs.datasets import spiral_data
+from sklearn.datasets import load_iris
 
-X, y = spiral_data(10, 2)
-print(X.shape)
+dataset = load_iris()
+X, y = dataset.data, dataset.target
