@@ -2,13 +2,16 @@ import numpy as np
 
 from alt_network.layers import Layer
 from alt_network.exceptions import WrongLayerFormat
-from alt_network.optimizers import GDOptimizer, SGDOptimizer
 
-# TODO: Implement Stochastic Gradient Descent
 
-class NeuralNetwork(SGDOptimizer):
 
-    def __init__(self, X, y, learning_rate=0.5, epochs=100, batch=5):
+class NeuralNetwork:
+
+    def __init__(self, X, y, 
+                 learning_rate=0.5, 
+                 epochs=50, 
+                 batch=5, 
+                 optimization="sgd"):
         self.X = X
         self.y = y
 

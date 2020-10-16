@@ -2,6 +2,7 @@ import numpy as np
 
 from alt_network.template_data import X, y
 from alt_network.nn import NeuralNetwork
+from overlays import OptimizedNN
 
 
 def shuffle_data(X, y):
@@ -29,12 +30,14 @@ if __name__ == "__main__":
     print(y)
     print("-"*100)
 
-    nn = NeuralNetwork(X, y, epochs=3000)
-    
+    NeuralNet = OptimizedNN.get_nn("sgd")
+    nn = NeuralNet(X, y, epochs=50)
+
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
     nn.display_layers()
+
     nn.fit()
     prediction = nn.predict()
     print(prediction)
