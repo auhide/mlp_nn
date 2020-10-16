@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # y = np.array([0, 1, 1, 0])
 
     X, y = shuffle_data(X, y)
-    X, y = X[:10], y[:10]
+    X, y = X[:50], y[:50]
     X = X.astype(np.float128)
     
     print(X)
