@@ -30,7 +30,7 @@ if __name__ == "__main__":
     print(y)
     print("-"*100)
 
-    NeuralNet = OptimizedNN.get_nn("sgd")
+    NeuralNet = OptimizedNN().get_nn(optimizer="sgd")
     nn = NeuralNet(X, y, epochs=50)
 
     nn.add_layer(neurons=3)
@@ -39,5 +39,5 @@ if __name__ == "__main__":
     nn.display_layers()
 
     nn.fit()
-    prediction = nn.predict()
+    prediction = nn.predict(X)
     print(prediction)

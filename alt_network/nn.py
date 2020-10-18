@@ -10,8 +10,7 @@ class NeuralNetwork:
     def __init__(self, X, y, 
                  learning_rate=0.5, 
                  epochs=50, 
-                 batch=5, 
-                 optimization="sgd"):
+                 batch=5):
         self.X = X
         self.y = y
 
@@ -28,8 +27,8 @@ class NeuralNetwork:
         self._backpropagation()
 
 
-    def predict(self):
-        self._forward(self.X)
+    def predict(self, X):
+        self._forward(X)
         prediction = self._convert_as_prediction(self._layers[-1].output)
         
         return np.array(prediction)

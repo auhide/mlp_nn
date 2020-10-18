@@ -1,5 +1,6 @@
 from alt_network.nn import NeuralNetwork
 from alt_network.optimizers import *
+from alt_network.exceptions import OptimizerDoesNotExist
 
 
 
@@ -28,4 +29,9 @@ class OptimizedNN:
         
         elif optimizer == "gd":
             return neuralnet_with_optimizer(GDOptimizer)
+
+        else:
+            raise OptimizerDoesNotExist(
+                f"""Optimizer {optimizer} is not supported by OptimizedNN."""
+            )
 
