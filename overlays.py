@@ -12,9 +12,14 @@ def neuralnet_with_optimizer(optimizer):
     return NeuralNet
 
 
-class OptimizedNN:
+class NeuralNetFactory:
+    """
+    A Factory class that returns a Neural Network with a certain optimizer.
+    For that you have to call the `get_nn()` class method.
+    """
 
-    def get_nn(self, optimizer="sgd"):
+    @classmethod
+    def get_nn(cls, optimizer="sgd"):
         """Initiates a class with a certain `optimizer`
 
         Args:
@@ -32,6 +37,6 @@ class OptimizedNN:
 
         else:
             raise OptimizerDoesNotExist(
-                f"""Optimizer {optimizer} is not supported by OptimizedNN."""
+                f"""Optimizer {optimizer} is not supported by `NeuralNetFactory`."""
             )
 

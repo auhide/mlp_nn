@@ -9,7 +9,7 @@ class Layer:
 
         self.weights = np.random.randn(n_inputs, n_neurons)
         self.biases = np.zeros((1, n_neurons))
-        # Will be calculated in the nn.py module
+        # Will be calculated in the optimizers' module - optimizers.py
         self.errors = None
 
 

@@ -1,5 +1,4 @@
 
-
 class GDOptimizer:
 
     def _backpropagation(self):

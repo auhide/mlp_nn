@@ -127,9 +127,3 @@ class NeuralNetwork:
             expected_converted[i][output] = 1
 
         self.expected_output = expected_converted
-        # print(f"Changed Expected: {self.expected_output}")
-
-
-
-if __name__ == "__main__":
-    pass
