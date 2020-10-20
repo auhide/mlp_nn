@@ -2,6 +2,7 @@ import numpy as np
 
 from alt_network.template_data import X, y
 from overlays import NeuralNetFactory
+from alt_network.evaluations import Evaluator
 
 
 def shuffle_data(X, y):
@@ -67,3 +68,6 @@ if __name__ == "__main__":
     prediction = nn.predict(X_test)
     print("Prediction:\n", prediction)
     print("Expected:\n", y_test)
+
+    accuracy = Evaluator.accuracy(y_test, prediction)
+    print("\n", accuracy)
