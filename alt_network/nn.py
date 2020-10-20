@@ -10,7 +10,8 @@ class NeuralNetwork:
     def __init__(self, X, y, 
                  learning_rate=0.5, 
                  epochs=50, 
-                 batch=5):
+                 batch=5,
+                 random=0):
         self.X = X
         self.y = y
 
@@ -19,6 +20,7 @@ class NeuralNetwork:
         self.output_neurons = len(set(y))
         self.l_rate = learning_rate
         self.epochs = epochs
+        self.random = random
 
         self._layers = []
 
@@ -46,14 +48,14 @@ class NeuralNetwork:
         # When adding the first layer
         if not len(self._layers):
             self._layers.append(
-                Layer(self.input_neurons, neurons)
+                Layer(self.input_neurons, neurons, self.random)
             )
         
         # Adding all other layers
         else:
             prev_layer_inputs = self._layers[len(self._layers)-1].n_neurons
             self._layers.append(
-                Layer(prev_layer_inputs, neurons)
+                Layer(prev_layer_inputs, neurons, self.random)
             )
 
 
@@ -106,7 +108,7 @@ class NeuralNetwork:
         Returns:
             bool: Whether the out layer is valid or not
         """
-        return self._layers[len(self._layers)-1].n_neurons == self.output_neurons
+        return self._layers[-1].n_neurons == self.output_neurons
 
     
     def _reformat_output(self, y):

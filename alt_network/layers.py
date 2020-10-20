@@ -3,10 +3,11 @@ import numpy as np
 
 class Layer:
 
-    def __init__(self, n_inputs, n_neurons):
+    def __init__(self, n_inputs, n_neurons, random_state):
         self.n_inputs = n_inputs
         self.n_neurons = n_neurons
 
+        np.random.seed(random_state)
         self.weights = np.random.randn(n_inputs, n_neurons)
         self.biases = np.zeros((1, n_neurons))
         # Will be calculated in the optimizers' module - optimizers.py

@@ -1,4 +1,6 @@
 
+# TODO: Add Momentum to the SGD and implement the Adam Optimizer
+
 class GDOptimizer:
 
     def _backpropagation(self):

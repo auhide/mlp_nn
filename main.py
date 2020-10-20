@@ -5,6 +5,7 @@ from overlays import NeuralNetFactory
 
 
 def shuffle_data(X, y):
+    np.random.seed(1)
     ids_shuffled = np.random.permutation(len(y))
     X = X[ids_shuffled]
     y = y[ids_shuffled]
@@ -15,7 +16,6 @@ def shuffle_data(X, y):
 def preprocess(X, y):
     X, y = shuffle_data(X, y)
     X = normalize_data(X)
-    print(X)
 
     return train_test_split(X, y)
 
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     print("-"*100)
 
     NeuralNet = NeuralNetFactory.get_nn(optimizer="sgd")
-    nn = NeuralNet(X_train, y_train, epochs=10)
+    nn = NeuralNet(X_train, y_train, epochs=10, random=0)
 
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
