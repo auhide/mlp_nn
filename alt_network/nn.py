@@ -11,7 +11,8 @@ class NeuralNetwork:
                  learning_rate=0.5, 
                  epochs=50, 
                  batch=5,
-                 random=0):
+                 random=0,
+                 activation="sigm"):
         self.X = X
         self.y = y
 
@@ -21,6 +22,7 @@ class NeuralNetwork:
         self.l_rate = learning_rate
         self.epochs = epochs
         self.random = random
+        self.activation = activation
 
         self._layers = []
 
@@ -48,14 +50,14 @@ class NeuralNetwork:
         # When adding the first layer
         if not len(self._layers):
             self._layers.append(
-                Layer(self.input_neurons, neurons, self.random)
+                Layer(self.input_neurons, neurons, self.random, self.activation)
             )
         
         # Adding all other layers
         else:
             prev_layer_inputs = self._layers[len(self._layers)-1].n_neurons
             self._layers.append(
-                Layer(prev_layer_inputs, neurons, self.random)
+                Layer(prev_layer_inputs, neurons, self.random, self.activation)
             )
 
 

@@ -57,7 +57,7 @@ if __name__ == "__main__":
     print("-"*100)
 
     NeuralNet = NeuralNetFactory.get_nn(optimizer="sgd")
-    nn = NeuralNet(X_train, y_train, epochs=10, random=0)
+    nn = NeuralNet(X_train, y_train, epochs=10, random=0, activation="sigm")
 
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
