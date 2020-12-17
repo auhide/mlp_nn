@@ -1,8 +1,8 @@
 import numpy as np
 
-from alt_network.template_data import X, y
+from neural_network.template_data import X, y
 from overlays import NeuralNetFactory
-from alt_network.evaluations import Evaluator
+from neural_network.evaluations import Evaluator
 
 
 def shuffle_data(X, y):

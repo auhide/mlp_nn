@@ -1,6 +1,6 @@
-from alt_network.nn import NeuralNetwork
-from alt_network.optimizers import *
-from alt_network.exceptions import OptimizerDoesNotExist
+from neural_network.nn import NeuralNetwork
+from neural_network.optimizers import *
+from neural_network.exceptions import OptimizerDoesNotExist
 
 
 
