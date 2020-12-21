@@ -26,10 +26,8 @@ class NeuralNetwork:
 
         self._layers = []
 
-
     def fit(self):
         self._backpropagation()
-
 
     def predict(self, X):
         self._forward(X)
@@ -37,13 +35,20 @@ class NeuralNetwork:
         
         return np.array(prediction)
 
+    def get_architecture(self):
+        """Creates a dictionary describing the architecture of the NN
 
-    def display_layers(self):
-        print(f"Layer[0]: (1, {self.input_neurons})")
+        Returns:
+            dict: Architecture of the NN
+        """
+
+        architecture = {}
+        architecture[0] = self.input_neurons
 
         for i in range(len(self._layers)):
-            print(f"Layer[{i+1}]: ({self._layers[i].n_inputs}, {self._layers[i].n_neurons})")
+            architecture[i+1] = self._layers[i].n_neurons
 
+        return architecture
 
     def add_layer(self, neurons):
         
@@ -59,7 +64,6 @@ class NeuralNetwork:
             self._layers.append(
                 Layer(prev_layer_inputs, neurons, self.random, self.activation)
             )
-
 
     def _forward(self, X):
 
@@ -80,7 +84,6 @@ class NeuralNetwork:
 
         return self.output
 
-
     @staticmethod
     def _convert_as_prediction(raw_prediction):
         result = []
@@ -91,7 +94,6 @@ class NeuralNetwork:
 
         return result
 
-    
     def _update_weights(self, X):
         
         for i in range(len(self._layers)):
@@ -102,6 +104,13 @@ class NeuralNetwork:
 
             self._layers[i].weights += weights_change.T
 
+    def _update_biases(self):
+        pass
+        # for i in range(len(self._layers)):
+            # print(self._layers[i].biases.shape)
+
+            # biases_change = self._layers[i].deltas * self.l_rate
+            # self._layers[i].biases += biases_change
 
     def _output_layer_is_valid(self):
         """True if the expected output layer's neurons are equal to the latest \
@@ -112,7 +121,6 @@ class NeuralNetwork:
         """
         return self._layers[-1].n_neurons == self.output_neurons
 
-    
     def _reformat_output(self, y):
         """
         Converts the vector of expected results

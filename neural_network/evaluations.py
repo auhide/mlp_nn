@@ -1,6 +1,8 @@
 from sklearn.metrics import confusion_matrix
 
 
+__all__ = ["Evaluator"]
+
 class ConfusionMatrix:
     
     @classmethod
@@ -19,4 +21,7 @@ class Accuracy:
 
 
 class Evaluator(ConfusionMatrix, Accuracy):
+    """
+    Class inheriting functionalities of different evaluation classes
+    """
     pass

@@ -25,6 +25,7 @@ class GDOptimizer:
                 self._layers[i].create_deltas()
 
         self._update_weights(X)
+        # self._update_biases()
         # self._forward(X)
 
 
@@ -44,3 +45,15 @@ class SGDOptimizer(GDOptimizer):
         
         for i in range(0, len(self.y), self.batch_size):
             yield self.X[i:i+self.batch_size], self.y[i:i+self.batch_size]
+
+
+class SGDMOptimizer():
+    """
+    The idea in a nutshell:
+        (accumulator) = (old accumulator)*(momentum) + (gradient)
+        (new weights) = (old weights) - (learning rate)*(accumulator)
+
+    Using the momentum of the Gradient for faster convergence.
+    """
+
+    pass

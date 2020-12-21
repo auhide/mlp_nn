@@ -62,7 +62,7 @@ if __name__ == "__main__":
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
-    nn.display_layers()
+    print(nn.get_architecture())
 
     nn.fit()
     prediction = nn.predict(X_test)
@@ -70,4 +70,4 @@ if __name__ == "__main__":
     print("Expected:\n", y_test)
 
     accuracy = Evaluator.accuracy(y_test, prediction)
-    print("\n", accuracy)
+    print("\nAccuracy: ", accuracy)
