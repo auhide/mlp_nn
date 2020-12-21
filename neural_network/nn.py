@@ -12,7 +12,8 @@ class NeuralNetwork:
                  epochs=50, 
                  batch=5,
                  random=0,
-                 activation="sigm"):
+                 activation="sigm",
+                 momentum=0.5):
         self.X = X
         self.y = y
 
@@ -23,6 +24,7 @@ class NeuralNetwork:
         self.epochs = epochs
         self.random = random
         self.activation = activation
+        self.momentum = momentum
 
         self._layers = []
 
@@ -103,14 +105,6 @@ class NeuralNetwork:
             weights_change = self._layers[i].deltas.T.dot(curr_input) * self.l_rate
 
             self._layers[i].weights += weights_change.T
-
-    def _update_biases(self):
-        pass
-        # for i in range(len(self._layers)):
-            # print(self._layers[i].biases.shape)
-
-            # biases_change = self._layers[i].deltas * self.l_rate
-            # self._layers[i].biases += biases_change
 
     def _output_layer_is_valid(self):
         """True if the expected output layer's neurons are equal to the latest \

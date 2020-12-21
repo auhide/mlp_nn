@@ -6,7 +6,7 @@ from neural_network.exceptions import OptimizerDoesNotExist
 
 def neuralnet_with_optimizer(optimizer):
 
-    class NeuralNet(NeuralNetwork, optimizer):
+    class NeuralNet(optimizer, NeuralNetwork):
         pass
 
     return NeuralNet
@@ -34,6 +34,9 @@ class NeuralNetFactory:
         
         elif optimizer == "gd":
             return neuralnet_with_optimizer(GDOptimizer)
+
+        elif optimizer == "sgdm":
+            return neuralnet_with_optimizer(SGDMOptimizer)
 
         else:
             raise OptimizerDoesNotExist(
