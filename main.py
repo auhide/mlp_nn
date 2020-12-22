@@ -56,19 +56,22 @@ if __name__ == "__main__":
     print(y_train)
     print("-"*100)
 
-    NeuralNet = NeuralNetFactory.get_nn(optimizer="sgdm")
-    nn = NeuralNet(
-        X_train, y_train,
+    architecture = {
+        0: 3,
+        1: 3,
+        2: 3,
+    }
+
+    nn = NeuralNetFactory.define_nn(
+        optimizer="sgdm",
+        architecture_dict=architecture,
+        X=X_train, 
+        y=y_train,
         learning_rate=0.5, 
         epochs=10, 
         random=0, 
         activation="sigm"
     )
-
-    nn.add_layer(neurons=3)
-    nn.add_layer(neurons=3)
-    nn.add_layer(neurons=3)
-    print(f"Architecture:\n{nn.get_architecture()}\n")
 
     nn.fit()
     print("Training Has Finished\n")

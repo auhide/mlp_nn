@@ -110,3 +110,21 @@ class AdaGrad(SGDOptimizer):
 
             # Updating the weights
             self._layers[i].weights += gradient.T * self.l_rate
+
+
+class RMSpropOptimizer(SGDOptimizer):
+    """
+    Steps of RMSprop:
+        SdW = (beta)*SdW + (1 - beta)*dW^2
+        Where:
+            SdW - Exponentially weighted average
+            dW - Gradient of the weights
+
+        W = W - (learning rate) * (dW / sqrt(SdW))
+        
+    """
+    pass
+
+
+class AdamOptimizer(SGDOptimizer):
+    pass
