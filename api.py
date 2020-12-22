@@ -80,4 +80,4 @@ api.add_resource(Weights, "/weights")
 api.add_resource(Architecture, "/architecture")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
