@@ -32,27 +32,27 @@ class Architecture(Resource):
             dict: Converted JSON
         """
         
-        for layer_i, neurons in json.items():
-            json[layer_i] = int(neurons)
+        architecture = json["architecture"]
+        optimization = json["optimization"]
+        hyperparameters = json["hyperparameters"]
 
-        return json
+        return architecture, optimization, hyperparameters
 
     def post(self):
         architecture = request.get_json(force=True)
-        architecture = self._parse_architecture_json(architecture)
+        architecture, optimization, hyperparams = self._parse_architecture_json(
+            architecture
+        )
 
         X_train, X_test, y_train, y_test = preprocess(X, y)
 
         try:
             nn = NeuralNetFactory.define_nn(
-                optimizer="sgdm",
-                architecture_dict=architecture,
                 X=X_train, 
                 y=y_train,
-                learning_rate=0.5, 
-                epochs=10, 
-                random=0, 
-                activation="sigm"
+                architecture_dict=architecture,
+                optimizer=optimization,
+                **hyperparams
             )
 
             nn.fit()
