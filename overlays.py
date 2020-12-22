@@ -38,6 +38,9 @@ class NeuralNetFactory:
         elif optimizer == "sgdm":
             return neuralnet_with_optimizer(SGDMOptimizer)
 
+        elif optimizer == "adagrad":
+            return neuralnet_with_optimizer(AdaGrad)
+
         else:
             raise OptimizerDoesNotExist(
                 f"""Optimizer {optimizer} is not supported by `NeuralNetFactory`."""

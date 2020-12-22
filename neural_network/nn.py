@@ -8,12 +8,13 @@ from neural_network.exceptions import WrongLayerFormat
 class NeuralNetwork:
 
     def __init__(self, X, y, 
-                 learning_rate=0.5, 
+                 learning_rate=0.1, 
                  epochs=50, 
                  batch=5,
                  random=0,
                  activation="sigm",
-                 momentum=0.5):
+                 momentum=0.5,
+                 epsilon=1e-2):
         self.X = X
         self.y = y
 
@@ -25,7 +26,7 @@ class NeuralNetwork:
         self.random = random
         self.activation = activation
         self.momentum = momentum
-
+        self.epsilon = epsilon
         self._layers = []
 
     def fit(self):
@@ -53,6 +54,11 @@ class NeuralNetwork:
         return architecture
 
     def add_layer(self, neurons):
+        """Adds new layer to your NeuralNet object
+
+        Args:
+            neurons (int): number of neurons of the added layer
+        """
         
         # When adding the first layer
         if not len(self._layers):

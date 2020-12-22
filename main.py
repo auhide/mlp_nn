@@ -58,7 +58,8 @@ if __name__ == "__main__":
 
     NeuralNet = NeuralNetFactory.get_nn(optimizer="sgdm")
     nn = NeuralNet(
-        X_train, y_train, 
+        X_train, y_train,
+        learning_rate=0.5, 
         epochs=10, 
         random=0, 
         activation="sigm"
@@ -67,9 +68,10 @@ if __name__ == "__main__":
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
     nn.add_layer(neurons=3)
-    print(nn.get_architecture())
+    print(f"Architecture:\n{nn.get_architecture()}\n")
 
     nn.fit()
+    print("Training Has Finished\n")
     prediction = nn.predict(X_test)
     print("Prediction:\n", prediction)
     print("Expected:\n", y_test)

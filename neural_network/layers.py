@@ -2,6 +2,7 @@ import numpy as np
 
 from neural_network.activations import NeuronActivations, ACTIVATIONS
 
+
 class Layer(NeuronActivations):
 
     def __init__(self, n_inputs, n_neurons, random_state, activation):
@@ -10,7 +11,7 @@ class Layer(NeuronActivations):
         self.activation = activation
 
         np.random.seed(random_state)
-        self.weights = np.random.randn(n_inputs, n_neurons)
+        self.weights = np.random.randn(n_inputs, n_neurons).astype(np.float128)
         self.biases = np.zeros((1, n_neurons))
         # Will be calculated in the optimizers' module - optimizers.py
         self.errors = None

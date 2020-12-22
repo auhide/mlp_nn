@@ -1,7 +1,7 @@
 import numpy as np
 
 
-# TODO: Add Momentum to the SGD and implement the Adam Optimizer
+# TODO: Implement the Adam Optimizer
 
 class GDOptimizer:
 
@@ -26,7 +26,6 @@ class GDOptimizer:
                 self._layers[i].create_deltas()
 
         self._update_weights(X)
-        # self._forward(X)
 
 
 class SGDOptimizer(GDOptimizer):
@@ -51,6 +50,8 @@ class SGDMOptimizer(SGDOptimizer):
     The idea in a nutshell:
         (accumulator) = (old accumulator)*(momentum) + (gradient)
         (new weights) = (old weights) - (learning rate)*(accumulator)
+
+    (old accumulator) is always the average of the previous gradients
 
     Using the momentum of the Gradient for faster convergence.
     """
@@ -77,3 +78,35 @@ class SGDMOptimizer(SGDOptimizer):
 
             # Changing the weights
             self._layers[i].weights += self._accumulator.T * self.l_rate
+
+
+class AdaGrad(SGDOptimizer):
+    """
+    Stochastic optimization method that adapts the learning rate based on the
+    steps (epochs) it's taking. - https://www.paperswithcode.com/method/adagrad
+    
+    Here:
+        (learning rate) = (prev. learning rate) / sqrt(alpha + epsilon)
+        Where:
+            alpha = sum of squared weight gradients
+            epsilon = a small positive number; used because in some cases alpha
+            becomes extremely small
+    """
+
+    # TODO: Fix the weights updation (Warning: Overflow encountered in `exp()`)
+    def _update_weights(self, X):
+
+        for i in range(len(self._layers)):
+            curr_input = np.atleast_2d(
+                X if i == 0 else self._layers[i-1].output
+            )
+            gradient = self._layers[i].deltas.T.dot(curr_input)
+
+            # Calculating alpha
+            alpha = np.sum(gradient ** 2)
+
+            # Changing the learning rate
+            self.l_rate = self.l_rate / np.sqrt(alpha + self.epsilon)
+
+            # Updating the weights
+            self._layers[i].weights += gradient.T * self.l_rate
