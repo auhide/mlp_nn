@@ -45,9 +45,6 @@ def normalize_data(X):
 
 
 if __name__ == "__main__":
-    # X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-    # y = np.array([0, 1, 1, 0])
-
     X_train, X_test, y_train, y_test = preprocess(X, y)
     X_train = X_train.astype(np.float128)
     
