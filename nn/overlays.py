@@ -1,6 +1,6 @@
-from neural_network.nn import NeuralNetwork
-from neural_network.optimizers import *
-from neural_network.exceptions import OptimizerDoesNotExist
+from nn.neural_network.nn import NeuralNetwork
+from nn.neural_network.optimizers import *
+from nn.neural_network.exceptions import OptimizerDoesNotExist
 
 
 DEFAULT_ARCH = {

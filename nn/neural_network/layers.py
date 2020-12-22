@@ -1,6 +1,6 @@
 import numpy as np
 
-from neural_network.activations import NeuronActivations, ACTIVATIONS
+from nn.neural_network.activations import NeuronActivations, ACTIVATIONS
 
 
 class Layer(NeuronActivations):

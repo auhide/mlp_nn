@@ -1,7 +1,7 @@
 import numpy as np
 
-from neural_network.layers import Layer
-from neural_network.exceptions import WrongLayerFormat
+from nn.neural_network.layers import Layer
+from nn.neural_network.exceptions import WrongLayerFormat
 
 
 
