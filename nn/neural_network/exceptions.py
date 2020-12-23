@@ -5,3 +5,7 @@ class WrongLayerFormat(Exception):
 
 class OptimizerDoesNotExist(Exception):
     pass
+
+
+class WrongNNArchitecture(Exception):
+    pass

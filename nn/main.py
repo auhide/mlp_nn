@@ -70,6 +70,7 @@ def test():
         epsilon=1e-7
     )
 
+    print(nn.get_architecture())
     nn.fit()
     print("Training Has Finished\n")
     prediction = nn.predict(X_test)

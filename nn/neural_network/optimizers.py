@@ -131,7 +131,7 @@ class AdamOptimizer(SGDOptimizer):
                     v = np.zeros(gradient.shape)
 
                 else:
-                    m, v = self._add_or_remove_weights(m, v, gradient)
+                    m, v = self._change_shapes_of_biases(m, v, gradient)
 
                 # Biased first moment estimate
                 m = self.beta_1 * m + (1 - self.beta_1) * gradient
@@ -146,34 +146,60 @@ class AdamOptimizer(SGDOptimizer):
 
                 self._layers[i].weights += self.l_rate * weight_change.T
 
-    def _add_or_remove_weights(self, m, v, gradient):
-        shape_diff = gradient.shape[1] - m.shape[1]
+    def _change_shapes_of_biases(self, m, v, gradient):
+        shape_diff_cols = gradient.shape[1] - m.shape[1]
+        shape_diff_rows = gradient.shape[0] - m.shape[0]
 
-        if shape_diff == 0:
+        if shape_diff_cols == 0:
             return m, v
 
-        if shape_diff < 0:
-            m = self._rem_col(m, shape_diff)
-            v = self._rem_col(v, shape_diff)
+        if shape_diff_cols < 0:
+            m = self._rem_col_or_row(m, shape_diff_cols, 1)
+            v = self._rem_col_or_row(v, shape_diff_cols, 1)
 
-            return m, v
+        elif shape_diff_cols > 0:
+            m = self._add_cols(m, shape_diff_cols)
+            v = self._add_cols(v, shape_diff_cols)
 
-        elif shape_diff > 0:
-            m = self._add_col(m, shape_diff)
-            v = self._add_col(v, shape_diff)
+        if shape_diff_rows < 0:
+            m = self._rem_col_or_row(m, shape_diff_cols, 0)
+            v = self._rem_col_or_row(v, shape_diff_cols, 0)
 
-            return m, v
+        elif shape_diff_rows > 0:
+            m = self._add_rows(m, shape_diff_rows)
+            v = self._add_rows(v, shape_diff_rows)
 
-    def _rem_col(self, array, cols_to_remove):
-        bool_remove_arr = [False for _ in range(array.shape[1])]
-        bool_remove_arr[-1] = True
+        return m, v
 
-        # Removing the last column
-        array = array.compress(np.logical_not(bool_remove_arr), axis=1)
-        
+
+    def _rem_col_or_row(self, array, number_to_remove, axis):
+        """
+        Removes row or a column from `array`.
+        """
+        number_to_remove = abs(number_to_remove)
+
+        if axis == 0:
+            for _ in range(number_to_remove):
+                array = array[:-1, :]
+
+        else:
+            for _ in range(number_to_remove):
+                array = array[:, :-1]
+
         return array
 
-    def _add_col(self, array, cols_to_add):
-        new_cols = np.zeros((1, array.shape[0]))
+    def _add_cols(self, arr, cols_to_add):
+        new_cols = np.zeros((1, arr.shape[1] + cols_to_add))
 
-        return np.hstack((array, np.atleast_2d(new_cols).T))
+        for _ in range(cols_to_add):
+            arr = np.concatenate((arr, new_cols.T), axis=1)
+
+        return arr
+
+    def _add_rows(self, arr, rows_to_add):
+        new_rows = np.zeros((1, arr.shape[0]))
+
+        for _ in range(rows_to_add):
+            arr = np.concatenate((arr, new_rows))
+
+        return arr

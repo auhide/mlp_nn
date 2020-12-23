@@ -1,6 +1,9 @@
 from nn.neural_network.nn import NeuralNetwork
 from nn.neural_network.optimizers import *
-from nn.neural_network.exceptions import OptimizerDoesNotExist
+from nn.neural_network.exceptions import (
+    OptimizerDoesNotExist, 
+    WrongNNArchitecture
+)
 
 
 DEFAULT_ARCH = {
@@ -67,6 +70,9 @@ class NeuralNetFactory:
         Returns:
             NeuralNet: The defined Neural Network
         """
+        if not cls._architecture_is_valid(architecture_dict):
+            raise WrongNNArchitecture("All layers' neurons must be greater than 1")
+
         NeuralNet = cls.get_nn(optimizer=optimizer)
         nn = NeuralNet(**kwargs)
         
@@ -74,3 +80,22 @@ class NeuralNetFactory:
             nn.add_layer(neurons)
 
         return nn
+
+    @classmethod
+    def _architecture_is_valid(cls, architecture):
+        """Loops through the number of the neurons of each hidden layer.
+        If the neurons of a layer are less than 2, the architecture is not valid. 
+
+        Args:
+            architecture (dict): NN Architecture
+
+        Returns:
+            bool: Whether the NN Architecture is valid or not
+        """
+        
+        for layer_i, neurons in architecture.items():
+
+            if int(layer_i) > 0 and neurons < 2:
+                return False
+
+        return True
