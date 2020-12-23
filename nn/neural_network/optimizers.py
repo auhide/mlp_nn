@@ -106,10 +106,10 @@ class AdaGrad(SGDOptimizer):
             alpha = np.sum(gradient ** 2)
 
             # Changing the learning rate
-            self.l_rate = self.l_rate / np.sqrt(alpha + self.epsilon)
+            eta = self.l_rate / np.sqrt(alpha + self.epsilon)
 
             # Updating the weights
-            self._layers[i].weights += gradient.T * self.l_rate
+            self._layers[i].weights += gradient.T * eta
 
 
 class RMSpropOptimizer(SGDOptimizer):

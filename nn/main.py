@@ -59,7 +59,7 @@ def test():
     }
 
     nn = NeuralNetFactory.define_nn(
-        optimizer="sgdm",
+        optimizer="adagrad",
         architecture_dict=architecture,
         X=X_train, 
         y=y_train,
