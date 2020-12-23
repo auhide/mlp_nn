@@ -22,7 +22,7 @@ class Weights(Resource):
 class Architecture(Resource):
 
     @staticmethod
-    def _parse_architecture_json(json):
+    def _parse_request_json(json):
         """Casts the keys (number of neurons) to integers
 
         Args:
@@ -39,9 +39,9 @@ class Architecture(Resource):
         return architecture, optimization, hyperparameters
 
     def post(self):
-        architecture = request.get_json(force=True)
-        architecture, optimization, hyperparams = self._parse_architecture_json(
-            architecture
+        request_json = request.get_json(force=True)
+        architecture, optimization, hyperparams = self._parse_request_json(
+            request_json
         )
 
         X_train, X_test, y_train, y_test = preprocess(X, y)

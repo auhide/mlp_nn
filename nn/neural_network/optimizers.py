@@ -83,7 +83,7 @@ class SGDMOptimizer(SGDOptimizer):
 class AdaGrad(SGDOptimizer):
     """
     Stochastic optimization method that adapts the learning rate based on the
-    steps (epochs) it's taking. - https://www.paperswithcode.com/method/adagrad
+    steps (epochs) it's taking. - https://d2l.ai/chapter_optimization/adagrad.html
     
     Here:
         (learning rate) = (prev. learning rate) / sqrt(alpha + epsilon)

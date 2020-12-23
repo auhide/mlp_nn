@@ -1,8 +1,8 @@
 import numpy as np
 
-from neural_network.template_data import X, y
-from overlays import NeuralNetFactory
-from neural_network.evaluations import Evaluator
+from nn.neural_network.template_data import X, y
+from nn.overlays import NeuralNetFactory
+from nn.neural_network.evaluations import Evaluator
 
 
 def shuffle_data(X, y):
@@ -43,8 +43,7 @@ def normalize_data(X):
     return X
 
 
-
-if __name__ == "__main__":
+def test():
     X_train, X_test, y_train, y_test = preprocess(X, y)
     X_train = X_train.astype(np.float128)
     
@@ -78,3 +77,7 @@ if __name__ == "__main__":
 
     accuracy = Evaluator.accuracy(y_test, prediction)
     print("\nAccuracy: ", accuracy)
+
+
+if __name__ == "__main__":
+    test()
