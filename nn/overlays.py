@@ -45,7 +45,10 @@ class NeuralNetFactory:
             return neuralnet_with_optimizer(SGDMOptimizer)
 
         elif optimizer == "adagrad":
-            return neuralnet_with_optimizer(AdaGrad)
+            return neuralnet_with_optimizer(AdaGradOptimizer)
+
+        elif optimizer == "adam":
+            return neuralnet_with_optimizer(AdamOptimizer)
 
         else:
             raise OptimizerDoesNotExist(

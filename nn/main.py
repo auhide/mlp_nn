@@ -59,14 +59,15 @@ def test():
     }
 
     nn = NeuralNetFactory.define_nn(
-        optimizer="adagrad",
+        optimizer="adam",
         architecture_dict=architecture,
         X=X_train, 
         y=y_train,
-        learning_rate=0.5, 
+        learning_rate=0.1, 
         epochs=10, 
         random=0, 
-        activation="sigm"
+        activation="sigm",
+        epsilon=1e-7
     )
 
     nn.fit()

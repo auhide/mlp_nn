@@ -10,4 +10,3 @@ from nn.main import test
 
 
 test()
-print("LMAO")

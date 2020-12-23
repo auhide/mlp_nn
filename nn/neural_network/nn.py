@@ -9,12 +9,14 @@ class NeuralNetwork:
 
     def __init__(self, X, y, 
                  learning_rate=0.1, 
-                 epochs=50, 
+                 epochs=10, 
                  batch=5,
                  random=0,
                  activation="sigm",
                  momentum=0.5,
-                 epsilon=1e-2):
+                 epsilon=1e-7,
+                 beta_1=0.9,
+                 beta_2=0.999):
         self.X = X
         self.y = y
 
@@ -27,6 +29,9 @@ class NeuralNetwork:
         self.activation = activation
         self.momentum = momentum
         self.epsilon = epsilon
+        self.beta_1 = beta_1
+        self.beta_2 = beta_2
+
         self._layers = []
 
     def fit(self):

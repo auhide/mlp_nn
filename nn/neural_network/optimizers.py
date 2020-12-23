@@ -1,7 +1,6 @@
 import numpy as np
 
 
-# TODO: Implement the Adam Optimizer
 
 class GDOptimizer:
 
@@ -80,20 +79,20 @@ class SGDMOptimizer(SGDOptimizer):
             self._layers[i].weights += self._accumulator.T * self.l_rate
 
 
-class AdaGrad(SGDOptimizer):
+class AdaGradOptimizer(SGDOptimizer):
     """
     Stochastic optimization method that adapts the learning rate based on the
     steps (epochs) it's taking. - https://d2l.ai/chapter_optimization/adagrad.html
+    Paper: https://stanford.edu/~jduchi/projects/DuchiHaSi10_colt.pdf
     
     Here:
-        (learning rate) = (prev. learning rate) / sqrt(alpha + epsilon)
+        (adapted learning rate) = (learning rate) / sqrt(alpha + epsilon)
         Where:
             alpha = sum of squared weight gradients
             epsilon = a small positive number; used because in some cases alpha
             becomes extremely small
     """
 
-    # TODO: Fix the weights updation (Warning: Overflow encountered in `exp()`)
     def _update_weights(self, X):
 
         for i in range(len(self._layers)):
@@ -106,25 +105,75 @@ class AdaGrad(SGDOptimizer):
             alpha = np.sum(gradient ** 2)
 
             # Changing the learning rate
-            eta = self.l_rate / np.sqrt(alpha + self.epsilon)
+            adapted_l_rate = self.l_rate / np.sqrt(alpha + self.epsilon)
 
             # Updating the weights
-            self._layers[i].weights += gradient.T * eta
-
-
-class RMSpropOptimizer(SGDOptimizer):
-    """
-    Steps of RMSprop:
-        SdW = (beta)*SdW + (1 - beta)*dW^2
-        Where:
-            SdW - Exponentially weighted average
-            dW - Gradient of the weights
-
-        W = W - (learning rate) * (dW / sqrt(SdW))
-        
-    """
-    pass
+            self._layers[i].weights += gradient.T * adapted_l_rate
 
 
 class AdamOptimizer(SGDOptimizer):
-    pass
+    """
+    Paper: https://arxiv.org/pdf/1412.6980.pdf
+    Page 2 is where the algorithm steps are written.
+    """
+    
+    # TODO: Make Adam Work
+    def _update_weights(self, X):
+
+        for i in range(len(self._layers)):
+                curr_input = np.atleast_2d(
+                    X if i == 0 else self._layers[i-1].output
+                )
+                gradient = self._layers[i].deltas.T.dot(curr_input)
+                
+                if i == 0:
+                    m = np.zeros(gradient.shape)
+                    v = np.zeros(gradient.shape)
+
+                else:
+                    m, v = self._add_or_remove_weights(m, v, gradient)
+
+                # Biased first moment estimate
+                m = self.beta_1 * m + (1 - self.beta_1) * gradient
+                # Biased second raw moment estimate
+                v = self.beta_2 * v + (1 - self.beta_2) * (gradient ** 2)
+
+                # Bias-corrected
+                m_hat = m / (1 - self.beta_1)
+                v_hat = v / (1 - self.beta_2)
+
+                weight_change = m_hat / (np.sqrt(v_hat) + self.epsilon)
+
+                self._layers[i].weights += self.l_rate * weight_change.T
+
+    def _add_or_remove_weights(self, m, v, gradient):
+        shape_diff = gradient.shape[1] - m.shape[1]
+
+        if shape_diff == 0:
+            return m, v
+
+        if shape_diff < 0:
+            m = self._rem_col(m, shape_diff)
+            v = self._rem_col(v, shape_diff)
+
+            return m, v
+
+        elif shape_diff > 0:
+            m = self._add_col(m, shape_diff)
+            v = self._add_col(v, shape_diff)
+
+            return m, v
+
+    def _rem_col(self, array, cols_to_remove):
+        bool_remove_arr = [False for _ in range(array.shape[1])]
+        bool_remove_arr[-1] = True
+
+        # Removing the last column
+        array = array.compress(np.logical_not(bool_remove_arr), axis=1)
+        
+        return array
+
+    def _add_col(self, array, cols_to_add):
+        new_cols = np.zeros((1, array.shape[0]))
+
+        return np.hstack((array, np.atleast_2d(new_cols).T))
