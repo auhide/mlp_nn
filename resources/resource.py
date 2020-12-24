@@ -8,13 +8,50 @@ from nn.neural_network.evaluations import Evaluator
 from nn.neural_network.template_data import X, y
 from preprocess.base import preprocess
 
-GLOBAL_NN = None
 
+class Architecture(Resource):
 
-class Weights(Resource):
+    def post(self):
+        request_json = request.get_json(force=True)
+        architecture, optimization, hyperparams = self._parse_request_json(
+            request_json
+        )
+
+        X_train, X_test, y_train, y_test = preprocess(X, y)
+
+        try:
+            self.nn = NeuralNetFactory.define_nn(
+                X=X_train, 
+                y=y_train,
+                architecture_dict=architecture,
+                optimizer=optimization,
+                **hyperparams
+            )
+
+            self.nn.fit()
+            prediction = self.nn.predict(X_test)
+
+            accuracy = Evaluator.accuracy(y_test, prediction)
+
+        except Exception as e:
+            return {
+                "StatusCode": 500,
+                "Message": str(e)
+            }
+
+        weights = self._parse_nn_weights(self.nn._layers)
+
+        return {
+            "StatusCode": 200,
+            "Message": "Successfully Created NN",
+            "Data": {
+                "Weights": weights,
+                "Accuracy": accuracy,
+            }
+        }
 
     @staticmethod
-    def _parse_nn_layers(layers):
+    def _parse_nn_weights(layers):
         parsed_weights_dict = {}
 
         for i, layer in enumerate(layers):
@@ -22,20 +59,6 @@ class Weights(Resource):
             parsed_weights_dict[i+1] = weights
 
         return parsed_weights_dict
-
-    def get(self):
-        print(GLOBAL_NN)
-        
-        if GLOBAL_NN:
-            return self._parse_nn_layers(GLOBAL_NN._layers)
-        
-        return {
-            "StatusCode": 404,
-            "Message": "You haven't created a Neural Network"
-        }
-
-
-class Architecture(Resource):
 
     @staticmethod
     def _parse_request_json(json):
@@ -53,41 +76,3 @@ class Architecture(Resource):
         hyperparameters = json["hyperparameters"]
 
         return architecture, optimization, hyperparameters
-
-    def post(self):
-        global GLOBAL_NN
-        request_json = request.get_json(force=True)
-        architecture, optimization, hyperparams = self._parse_request_json(
-            request_json
-        )
-
-        X_train, X_test, y_train, y_test = preprocess(X, y)
-
-        try:
-            GLOBAL_NN = NeuralNetFactory.define_nn(
-                X=X_train, 
-                y=y_train,
-                architecture_dict=architecture,
-                optimizer=optimization,
-                **hyperparams
-            )
-
-            GLOBAL_NN.fit()
-            print("Training Has Finished\n")
-            prediction = GLOBAL_NN.predict(X_test)
-            print("Prediction:\n", prediction)
-            print("Expected:\n", y_test)
-
-            accuracy = Evaluator.accuracy(y_test, prediction)
-            print("\nAccuracy: ", accuracy)
-
-        except Exception as e:
-            return {
-                "StatusCode": 500,
-                "Message": str(e)
-            }
-
-        return {
-            "StatusCode": 200,
-            "Message": "Successfully Created NN"
-        }
