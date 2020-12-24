@@ -6,7 +6,12 @@ class GDOptimizer:
 
     def _backpropagation(self):
         self._forward(self.X)
-        self._reformat_output(self.y)
+        
+        if self._layers[-1].n_neurons > 1:
+            self._reformat_output(self.y)
+        
+        else:
+            self.expected_output = self.y
 
         for _ in range(self.epochs):
             self._gradient_descent(self.X)
@@ -34,7 +39,12 @@ class SGDOptimizer(GDOptimizer):
         for epoch in range(self.epochs):
             for X, y in self._batch_split():
                 self._forward(X)
-                self._reformat_output(y)
+                
+                if self._layers[-1].n_neurons > 1:
+                    self._reformat_output(y)
+                
+                else:
+                    self.expected_output = self.y
 
                 self._gradient_descent(X)
 

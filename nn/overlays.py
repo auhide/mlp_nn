@@ -92,10 +92,11 @@ class NeuralNetFactory:
         Returns:
             bool: Whether the NN Architecture is valid or not
         """
+        max_layer_i = max(architecture.keys())
         
         for layer_i, neurons in architecture.items():
 
-            if int(layer_i) > 0 and neurons < 2:
+            if int(layer_i) > 0 and int(layer_i) < int(max_layer_i) and neurons < 2:
                 return False
 
         return True

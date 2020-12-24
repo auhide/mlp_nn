@@ -39,8 +39,12 @@ class NeuralNetwork:
 
     def predict(self, X):
         self._forward(X)
-        prediction = self._convert_as_prediction(self._layers[-1].output)
+        if self._layers[-1].n_neurons > 1:
+            prediction = self._convert_as_prediction(self._layers[-1].output)
         
+        else:
+            prediction = self._layers[-1].output
+
         return np.array(prediction)
 
     def get_architecture(self):
@@ -80,10 +84,12 @@ class NeuralNetwork:
 
     def _forward(self, X):
 
-        if not self._output_layer_is_valid():
-            raise WrongLayerFormat(
-                f"Last layer's neurons have to be {self.output_neurons}"
-            )
+        if self._layers[-1].n_neurons > 1:
+
+            if not self._output_layer_is_valid():
+                raise WrongLayerFormat(
+                    f"Last layer's neurons have to be {self.output_neurons}"
+                )
 
         for i, layer in enumerate(self._layers):
             
