@@ -13,6 +13,7 @@ class NeuralNetwork:
                  batch=5,
                  random=0,
                  activation="sigm",
+                 type=False,
                  momentum=0.5,
                  epsilon=1e-7,
                  beta_1=0.9,
@@ -39,13 +40,16 @@ class NeuralNetwork:
 
     def predict(self, X):
         self._forward(X)
+
         if self._layers[-1].n_neurons > 1:
-            prediction = self._convert_as_prediction(self._layers[-1].output)
-        
+            prediction = self._layers[-1].output
+            prediction = np.array(prediction)
+
         else:
             prediction = self._layers[-1].output
+            prediction = prediction.flatten()
 
-        return np.array(prediction)
+        return prediction
 
     def get_architecture(self):
         """Creates a dictionary describing the architecture of the NN
@@ -84,12 +88,10 @@ class NeuralNetwork:
 
     def _forward(self, X):
 
-        if self._layers[-1].n_neurons > 1:
-
-            if not self._output_layer_is_valid():
-                raise WrongLayerFormat(
-                    f"Last layer's neurons have to be {self.output_neurons}"
-                )
+        if not self._output_layer_is_valid():
+            raise WrongLayerFormat(
+                f"Last layer's neurons have to be {self.output_neurons}"
+            )
 
         for i, layer in enumerate(self._layers):
             
@@ -102,16 +104,6 @@ class NeuralNetwork:
         self.output = self._layers[-1].output
 
         return self.output
-
-    @staticmethod
-    def _convert_as_prediction(raw_prediction):
-        result = []
-        # print(raw_prediction)
-
-        for row in raw_prediction:
-            result.append(list(row).index(max(row)))
-
-        return result
 
     def _update_weights(self, X):
         

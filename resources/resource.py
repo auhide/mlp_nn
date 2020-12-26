@@ -29,7 +29,9 @@ class Architecture(Resource):
             )
 
             self.nn.fit()
-            prediction = self.nn.predict(X_test)
+            prediction = self._convert_as_prediction(
+                self.nn.predict(X_test)
+            )
 
             accuracy = Evaluator.accuracy(y_test, prediction)
 
@@ -76,3 +78,13 @@ class Architecture(Resource):
         hyperparameters = json["hyperparameters"]
 
         return architecture, optimization, hyperparameters
+
+    @staticmethod
+    def _convert_as_prediction(raw_prediction):
+        result = []
+        # print(raw_prediction)
+
+        for row in raw_prediction:
+            result.append(list(row).index(max(row)))
+
+        return np.array(result)

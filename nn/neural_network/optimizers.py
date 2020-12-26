@@ -3,15 +3,17 @@ import numpy as np
 
 
 class GDOptimizer:
+    regression = False
 
     def _backpropagation(self):
         self._forward(self.X)
         
         if self._layers[-1].n_neurons > 1:
             self._reformat_output(self.y)
-        
+
         else:
-            self.expected_output = self.y
+            self.regression = True
+            self.expected_output = self.y.reshape((-1, 1))
 
         for _ in range(self.epochs):
             self._gradient_descent(self.X)
@@ -33,6 +35,7 @@ class GDOptimizer:
 
 
 class SGDOptimizer(GDOptimizer):
+    regression = False
 
     def _backpropagation(self):
 
@@ -44,7 +47,8 @@ class SGDOptimizer(GDOptimizer):
                     self._reformat_output(y)
                 
                 else:
-                    self.expected_output = self.y
+                    self.regression = True
+                    self.expected_output = y.reshape((-1, 1))
 
                 self._gradient_descent(X)
 

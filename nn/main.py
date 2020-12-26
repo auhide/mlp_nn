@@ -42,6 +42,14 @@ def normalize_data(X):
 
     return X
 
+def convert_as_prediction(raw_prediction):
+    result = []
+    # print(raw_prediction)
+
+    for row in raw_prediction:
+        result.append(list(row).index(max(row)))
+
+    return np.array(result)
 
 def test():
     X_train, X_test, y_train, y_test = preprocess(X, y)
@@ -59,11 +67,11 @@ def test():
     }
 
     nn = NeuralNetFactory.define_nn(
-        optimizer="adam",
+        optimizer="sgdm",
         architecture_dict=architecture,
         X=X_train, 
         y=y_train,
-        learning_rate=0.1, 
+        learning_rate=0.5, 
         epochs=10, 
         random=0, 
         activation="sigm",
@@ -73,12 +81,12 @@ def test():
     print(nn.get_architecture())
     nn.fit()
     print("Training Has Finished\n")
-    prediction = nn.predict(X_test)
+    prediction = convert_as_prediction(nn.predict(X_test))
     print("Prediction:\n", prediction)
     print("Expected:\n", y_test)
 
-    accuracy = Evaluator.accuracy(y_test, prediction)
-    print("\nAccuracy: ", accuracy)
+    # accuracy = Evaluator.accuracy(y_test, prediction)
+    # print("\nAccuracy: ", accuracy)
 
 
 if __name__ == "__main__":
