@@ -3,53 +3,19 @@ import numpy as np
 from nn.neural_network.template_data import X, y
 from nn.overlays import NeuralNetFactory
 from nn.neural_network.evaluations import Evaluator
+from preprocess.base import *
 
 
-def shuffle_data(X, y):
-    np.random.seed(1)
-    ids_shuffled = np.random.permutation(len(y))
-    X = X[ids_shuffled]
-    y = y[ids_shuffled]
-
-    return X, y
-
-
-def preprocess(X, y):
-    X, y = shuffle_data(X, y)
-    X = normalize_data(X)
-
-    return train_test_split(X, y)
-
-
-def train_test_split(X, y, train_size=0.7):
-    train_size = int(train_size * len(X))
-    X_train = X[:train_size]
-    X_test = X[train_size:]
-    y_train = y[:train_size]
-    y_test = y[train_size:]
-
-    return X_train, X_test, y_train, y_test
-
-
-def normalize_data(X):
-    cols_max = X.max(axis=0)
-    X_transposed = X.T
-
-    for col_i in range(len(cols_max)):
-        X_transposed[col_i] = X_transposed[col_i] / cols_max[col_i]
-    
-    X = X_transposed.T
-
-    return X
 
 def convert_as_prediction(raw_prediction):
-    result = []
-    # print(raw_prediction)
+        result = []
+        # print(raw_prediction)
 
-    for row in raw_prediction:
-        result.append(list(row).index(max(row)))
+        for row in raw_prediction:
+            result.append(list(row).index(max(row)))
 
-    return np.array(result)
+        return np.array(result)
+
 
 def test():
     X_train, X_test, y_train, y_test = preprocess(X, y)
@@ -63,8 +29,7 @@ def test():
     architecture = {
         1: 3,
         2: 3,
-        3: 10,
-        4: 3
+        3: 3
     }
 
     nn = NeuralNetFactory.define_nn(
@@ -73,8 +38,8 @@ def test():
         architecture_dict=architecture,
         X=X_train, 
         y=y_train,
-        learning_rate=0.5, 
-        epochs=10, 
+        learning_rate=0.1, 
+        epochs=5, 
         random=0, 
         activation="sigm",
         epsilon=1e-7

@@ -6,7 +6,6 @@ sys_path = sys.path[0].split("/")
 sys_path.pop(-1)
 sys.path[0] = "/".join(sys_path)
 
-from nn.main import test
-
+from nn.tests import test
 
 test()

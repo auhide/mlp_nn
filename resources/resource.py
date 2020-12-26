@@ -45,7 +45,7 @@ class Architecture(Resource):
 
         return {
             "StatusCode": 200,
-            "Message": "Successfully Created NN",
+            "Message": "Successfully Created Neural Network",
             "Data": {
                 "Weights": weights,
                 "Accuracy": accuracy,
