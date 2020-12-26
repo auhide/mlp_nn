@@ -38,6 +38,7 @@ class NeuralNetwork:
         
         else:
             self.output_neurons = 1
+            self.activation = None
 
         self._layers = []
 

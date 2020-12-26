@@ -159,7 +159,7 @@ class AdamOptimizer(SGDOptimizer):
         shape_diff_cols = gradient.shape[1] - m.shape[1]
         shape_diff_rows = gradient.shape[0] - m.shape[0]
 
-        if shape_diff_cols == 0:
+        if shape_diff_cols == 0 and shape_diff_rows == 0:
             return m, v
 
         if shape_diff_cols < 0:
@@ -171,15 +171,14 @@ class AdamOptimizer(SGDOptimizer):
             v = self._add_cols(v, shape_diff_cols)
 
         if shape_diff_rows < 0:
-            m = self._rem_col_or_row(m, shape_diff_cols, 0)
-            v = self._rem_col_or_row(v, shape_diff_cols, 0)
+            m = self._rem_col_or_row(m, shape_diff_rows, 0)
+            v = self._rem_col_or_row(v, shape_diff_rows, 0)
 
         elif shape_diff_rows > 0:
             m = self._add_rows(m, shape_diff_rows)
             v = self._add_rows(v, shape_diff_rows)
 
         return m, v
-
 
     def _rem_col_or_row(self, array, number_to_remove, axis):
         """

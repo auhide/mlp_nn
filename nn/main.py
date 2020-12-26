@@ -63,7 +63,8 @@ def test():
     architecture = {
         1: 3,
         2: 3,
-        3: 3
+        3: 10,
+        4: 3
     }
 
     nn = NeuralNetFactory.define_nn(
@@ -72,7 +73,7 @@ def test():
         architecture_dict=architecture,
         X=X_train, 
         y=y_train,
-        learning_rate=0.1, 
+        learning_rate=0.5, 
         epochs=10, 
         random=0, 
         activation="sigm",
