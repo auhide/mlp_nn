@@ -7,13 +7,13 @@ from nn.neural_network.exceptions import WrongLayerFormat
 
 class NeuralNetwork:
 
-    def __init__(self, X, y, 
+    def __init__(self, X, y,
+                 type_="classification",
                  learning_rate=0.1, 
                  epochs=10, 
                  batch=5,
                  random=0,
                  activation="sigm",
-                 type=False,
                  momentum=0.5,
                  epsilon=1e-7,
                  beta_1=0.9,
@@ -23,7 +23,6 @@ class NeuralNetwork:
 
         self.batch_size = batch
         self.input_neurons = len(X[0])
-        self.output_neurons = len(set(y))
         self.l_rate = learning_rate
         self.epochs = epochs
         self.random = random
@@ -32,6 +31,13 @@ class NeuralNetwork:
         self.epsilon = epsilon
         self.beta_1 = beta_1
         self.beta_2 = beta_2
+
+        self.type = type_
+        if self.type == "classification":
+            self.output_neurons = len(set(y))
+        
+        else:
+            self.output_neurons = 1
 
         self._layers = []
 

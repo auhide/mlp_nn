@@ -61,17 +61,18 @@ def test():
     print("-"*100)
 
     architecture = {
-        0: 3,
         1: 3,
         2: 3,
+        3: 3
     }
 
     nn = NeuralNetFactory.define_nn(
-        optimizer="sgdm",
+        optimizer="adam",
+        # type_="regression",
         architecture_dict=architecture,
         X=X_train, 
         y=y_train,
-        learning_rate=0.5, 
+        learning_rate=0.1, 
         epochs=10, 
         random=0, 
         activation="sigm",
@@ -85,8 +86,8 @@ def test():
     print("Prediction:\n", prediction)
     print("Expected:\n", y_test)
 
-    # accuracy = Evaluator.accuracy(y_test, prediction)
-    # print("\nAccuracy: ", accuracy)
+    accuracy = Evaluator.accuracy(y_test, prediction)
+    print("\nAccuracy: ", accuracy)
 
 
 if __name__ == "__main__":

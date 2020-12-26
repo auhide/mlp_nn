@@ -3,7 +3,6 @@ import numpy as np
 
 
 class GDOptimizer:
-    regression = False
 
     def _backpropagation(self):
         self._forward(self.X)
@@ -12,7 +11,6 @@ class GDOptimizer:
             self._reformat_output(self.y)
 
         else:
-            self.regression = True
             self.expected_output = self.y.reshape((-1, 1))
 
         for _ in range(self.epochs):
@@ -35,7 +33,6 @@ class GDOptimizer:
 
 
 class SGDOptimizer(GDOptimizer):
-    regression = False
 
     def _backpropagation(self):
 
@@ -47,7 +44,6 @@ class SGDOptimizer(GDOptimizer):
                     self._reformat_output(y)
                 
                 else:
-                    self.regression = True
                     self.expected_output = y.reshape((-1, 1))
 
                 self._gradient_descent(X)
@@ -131,7 +127,6 @@ class AdamOptimizer(SGDOptimizer):
     Page 2 is where the algorithm steps are written.
     """
     
-    # TODO: Make Adam Work
     def _update_weights(self, X):
 
         for i in range(len(self._layers)):

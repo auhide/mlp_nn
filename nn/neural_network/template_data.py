@@ -4,7 +4,7 @@ dataset = load_iris()
 X, y = dataset.data, dataset.target
 
 
-# from sklearn.datasets import load_boston
+# from sklearn.datasets import load_diabetes
 
-# dataset = load_boston()
+# dataset = load_diabetes()
 # X, y = dataset.data, dataset.target

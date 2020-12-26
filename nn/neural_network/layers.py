@@ -18,11 +18,18 @@ class Layer(NeuronActivations):
 
     def forward(self, input_):
         self.output = input_.dot(self.weights) + self.biases
-        self.output = eval(f"self.{ACTIVATIONS[self.activation]}_activation(self.output)")
+        
+        if self.activation:
+            self.output = eval(f"self.{ACTIVATIONS[self.activation]}_activation(self.output)")
         
         return self.output
 
     def create_deltas(self):
-        self.deltas = self.errors * eval(
-            f"self.{ACTIVATIONS[self.activation]}_derivative(self.output)"
-        )
+
+        if self.activation:
+            self.deltas = self.errors * eval(
+                f"self.{ACTIVATIONS[self.activation]}_derivative(self.output)"
+            )
+        
+        else:
+            self.deltas = self.errors
