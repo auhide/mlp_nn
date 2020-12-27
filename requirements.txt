@@ -10,6 +10,7 @@ cycler==0.10.0
 distlib==0.3.0
 distro==1.4.0
 Flask==1.1.2
+Flask-Cors==3.0.9
 Flask-RESTful==0.3.8
 html5lib==1.0.1
 idna==2.8
