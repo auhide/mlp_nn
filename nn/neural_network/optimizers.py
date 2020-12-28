@@ -143,13 +143,13 @@ class AdamOptimizer(SGDOptimizer):
                     m, v = self._change_shapes_of_biases(m, v, gradient)
 
                 # Biased first moment estimate
-                m = self.beta_1 * m + (1 - self.beta_1) * gradient
+                m = self.beta1 * m + (1 - self.beta1) * gradient
                 # Biased second raw moment estimate
-                v = self.beta_2 * v + (1 - self.beta_2) * (gradient ** 2)
+                v = self.beta2 * v + (1 - self.beta2) * (gradient ** 2)
 
                 # Bias-corrected
-                m_hat = m / (1 - self.beta_1)
-                v_hat = v / (1 - self.beta_2)
+                m_hat = m / (1 - self.beta1)
+                v_hat = v / (1 - self.beta2)
 
                 weight_change = m_hat / (np.sqrt(v_hat) + self.epsilon)
 

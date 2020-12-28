@@ -16,8 +16,8 @@ class NeuralNetwork:
                  activation="sigm",
                  momentum=0.5,
                  epsilon=1e-7,
-                 beta_1=0.9,
-                 beta_2=0.999):
+                 beta1=0.9,
+                 beta2=0.999):
         self.X = X
         self.y = y
 
@@ -29,8 +29,8 @@ class NeuralNetwork:
         self.activation = activation
         self.momentum = momentum
         self.epsilon = epsilon
-        self.beta_1 = beta_1
-        self.beta_2 = beta_2
+        self.beta1 = beta1
+        self.beta2 = beta2
 
         self.type = type_
         if self.type == "classification":
