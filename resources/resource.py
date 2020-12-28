@@ -49,7 +49,8 @@ class Architecture(Resource):
             "Data": {
                 "Weights": weights,
                 "Accuracy": accuracy,
-            }
+            },
+            "RequestData": request_json
         }
 
     @staticmethod
