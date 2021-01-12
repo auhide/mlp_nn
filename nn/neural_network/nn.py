@@ -2,10 +2,10 @@ import numpy as np
 
 from nn.neural_network.layers import Layer
 from nn.neural_network.exceptions import WrongLayerFormat
+from nn.neural_network.evaluations import EpochEvaluator
 
 
-
-class NeuralNetwork:
+class NeuralNetwork(EpochEvaluator):
 
     def __init__(self, X, y,
                  type_="classification",
@@ -20,6 +20,7 @@ class NeuralNetwork:
                  beta2=0.999):
         self.X = X
         self.y = y
+        self.epochs_accuracy = {}
 
         self.batch_size = batch
         self.input_neurons = len(X[0])

@@ -48,6 +48,7 @@ def test():
     print(nn.get_architecture())
     nn.fit()
     print("Training Has Finished\n")
+    print(nn.predict(X_test))
     prediction = convert_as_prediction(nn.predict(X_test))
     print("Prediction:\n", prediction)
     print("Expected:\n", y_test)

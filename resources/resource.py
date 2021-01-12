@@ -34,6 +34,7 @@ class Architecture(Resource):
             )
 
             accuracy = Evaluator.accuracy(y_test, prediction)
+            epochs_accuracy = self.nn.epochs_accuracy
 
         except Exception as e:
             return {
@@ -49,6 +50,7 @@ class Architecture(Resource):
             "Data": {
                 "Weights": weights,
                 "Accuracy": accuracy,
+                "EpochsAccuracy": epochs_accuracy,
             },
             "RequestData": request_json
         }
@@ -83,7 +85,6 @@ class Architecture(Resource):
     @staticmethod
     def _convert_as_prediction(raw_prediction):
         result = []
-        # print(raw_prediction)
 
         for row in raw_prediction:
             result.append(list(row).index(max(row)))

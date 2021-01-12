@@ -1,4 +1,5 @@
 from sklearn.metrics import confusion_matrix
+import numpy as np
 
 
 __all__ = ["Evaluator"]
@@ -25,3 +26,21 @@ class Evaluator(ConfusionMatrix, Accuracy):
     Class inheriting functionalities of different evaluation classes
     """
     pass
+
+
+class EpochEvaluator:
+
+    def _evaluate_epoch(self, epoch):
+        prediction = self._convert_as_prediction(
+            self.predict(self.X)
+        )
+        self.epochs_accuracy[epoch] = Evaluator.accuracy(self.y, prediction)
+
+    @staticmethod
+    def _convert_as_prediction(raw_prediction):
+        result = []
+
+        for row in raw_prediction:
+            result.append(list(row).index(max(row)))
+
+        return np.array(result)

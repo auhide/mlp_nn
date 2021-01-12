@@ -1,7 +1,6 @@
 import numpy as np
 
 
-
 class GDOptimizer:
 
     def _backpropagation(self):
@@ -47,6 +46,8 @@ class SGDOptimizer(GDOptimizer):
                     self.expected_output = y.reshape((-1, 1))
 
                 self._gradient_descent(X)
+            
+            self._evaluate_epoch(epoch)
 
     def _batch_split(self):
         
