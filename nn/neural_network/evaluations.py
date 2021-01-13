@@ -7,8 +7,8 @@ __all__ = ["Evaluator"]
 class ConfusionMatrix:
     
     @classmethod
-    def confusion_mtx(cls, y_true, y_pred, labels=None):
-        return confusion_matrix(y_true, y_pred, labels)
+    def confusion_mtx(cls, y_true, y_pred):
+        return confusion_matrix(y_true, y_pred)
 
 
 class Accuracy:

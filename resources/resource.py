@@ -33,8 +33,13 @@ class Architecture(Resource):
                 self.nn.predict(X_test)
             )
 
+            # Accuracy Evaluation
             accuracy = Evaluator.accuracy(y_test, prediction)
             epochs_accuracy = self.nn.epochs_accuracy
+
+            # Confusion Matrix
+            raw_confusion_matrix = Evaluator.confusion_mtx(y_test, prediction)
+            confusion_matrix = self._convert_confusion_matrix(raw_confusion_matrix)
 
         except Exception as e:
             return {
@@ -46,11 +51,12 @@ class Architecture(Resource):
 
         return {
             "StatusCode": 200,
-            "Message": "Successfully Created Neural Network",
+            "Message": "Successfully Created Model!",
             "Data": {
                 "Weights": weights,
                 "Accuracy": accuracy,
                 "EpochsAccuracy": epochs_accuracy,
+                "ConfusionMatrix": confusion_matrix,
             },
             "RequestData": request_json
         }
@@ -90,3 +96,24 @@ class Architecture(Resource):
             result.append(list(row).index(max(row)))
 
         return np.array(result)
+
+    @staticmethod
+    def _convert_confusion_matrix(raw_matrix):
+        converted_conf_mtx = []
+        
+        # Transposing the matrix and reversing each row.
+        # This is done because that way it is easier to use the indexes of
+        # the numpy array as x & y coordinates
+        raw_matrix = np.flip(raw_matrix.T, 1)
+
+        for i, row in enumerate(raw_matrix.T):
+            
+            for j, col in enumerate(row):
+                single_element = {
+                    "x": j, 
+                    "y": i, 
+                    "color": int(col)
+                }
+                converted_conf_mtx.append(single_element)
+
+        return converted_conf_mtx

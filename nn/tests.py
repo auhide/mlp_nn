@@ -55,6 +55,7 @@ def test():
 
     accuracy = Evaluator.accuracy(y_test, prediction)
     print("\nAccuracy: ", accuracy)
+    conf_mtx = Evaluator.confusion_mtx(y_test, prediction, labels=None)
 
 
 if __name__ == "__main__":
