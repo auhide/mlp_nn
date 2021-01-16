@@ -1,6 +1,6 @@
-from sklearn.datasets import load_wine
+from sklearn.datasets import load_iris
 
-dataset = load_wine()
+dataset = load_iris()
 X, y = dataset.data, dataset.target
 
 
