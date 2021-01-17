@@ -1,0 +1,3 @@
+FROM mongo:4.4.3-bionic
+
+EXPOSE 27017-27019
