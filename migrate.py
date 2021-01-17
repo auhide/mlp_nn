@@ -5,9 +5,9 @@ Inserts all initially needed datasets for the Neural Network API
 import os
 import csv
 
-from database import get_datasets_collection
+from db.database import get_datasets_collection
 
-CSV_PATH = "csv_datasets"
+CSV_PATH = os.path.join("db", "csv_datasets")
 
 
 def migrate():

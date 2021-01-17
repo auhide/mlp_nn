@@ -2,8 +2,16 @@ version: '3'
 
 services:
   
+  mongodb:
+    build: ./db/
+    container_name: mongodb
+    ports:
+      - "27017-27019:27017-27019"
+
   nnvis-api:
-    image: nnvis-api:latest
+    build: .
+    container_name: nnvis-api
+    links:
+      - mongodb
     ports:
       - "5000:5000"
-  

@@ -17,5 +17,5 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Exposing the 5000th container port
 EXPOSE 5000
 
-# Starting the API 
-CMD ["python3", "api.py"]
+# Migrating datasets & Starting the API 
+ENTRYPOINT ["./setup_api.sh"]

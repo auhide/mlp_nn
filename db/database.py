@@ -9,7 +9,7 @@ def get_datasets_collection():
     """
     # Connecting to the Database and selecting the Collection
     
-    client = pymongo.MongoClient("mongodb://localhost:27017/")
+    client = pymongo.MongoClient("mongodb", 27017)
     db = client["nnvis-data"]
     datasets = db["datasets"]
 
