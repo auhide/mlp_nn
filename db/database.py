@@ -1,16 +1,28 @@
 import pymongo
 
 
-def get_datasets_collection():
-    """Returns a collection that consists of all datasets.
+SERVER = "mongodb"
+DATABASE = "nnvis-data"
 
-    Returns:
-        pymongo.collection.Collection: MongoDB Collection
-    """
-    # Connecting to the Database and selecting the Collection
-    
-    client = pymongo.MongoClient("mongodb", 27017)
-    db = client["nnvis-data"]
-    datasets = db["datasets"]
 
-    return datasets
+class DatabaseClient:
+
+    def __init__(self, server=SERVER, port=27017, db=DATABASE):
+        self.client = pymongo.MongoClient(server, port)
+        self.db = self.client[db]
+
+    def insert_documents(self, collection_name, data):
+        pass
+
+    def get_documents(self, collection_name):
+        result = self.db[collection_name].find()
+
+        return list(result)
+
+    def get_collection(self, collection_name):
+        collection = self.db[collection_name]
+
+        return collection
+
+
+default_db_client = DatabaseClient()
