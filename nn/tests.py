@@ -1,10 +1,9 @@
 import numpy as np
 
-from nn.neural_network.template_data import X, y
 from nn.overlays import NeuralNetFactory
 from nn.neural_network.evaluations import Evaluator
 from preprocess.base import *
-
+from db.database import DatabaseClient
 
 
 def convert_as_prediction(raw_prediction):
@@ -18,6 +17,9 @@ def convert_as_prediction(raw_prediction):
 
 
 def test():
+    db_client = DatabaseClient(server="127.0.0.1")
+    X, y = db_client.get_dataset({ "name": "heart_disease" })
+
     X_train, X_test, y_train, y_test = preprocess(X, y)
     X_train = X_train.astype(np.float128)
     
@@ -55,7 +57,7 @@ def test():
 
     accuracy = Evaluator.accuracy(y_test, prediction)
     print("\nAccuracy: ", accuracy)
-    conf_mtx = Evaluator.confusion_mtx(y_test, prediction, labels=None)
+    conf_mtx = Evaluator.confusion_mtx(y_test, prediction)
 
 
 if __name__ == "__main__":

@@ -4,21 +4,41 @@ from flask_restful import Resource
 
 from nn.overlays import NeuralNetFactory
 from nn.neural_network.evaluations import Evaluator
-
-from nn.neural_network.template_data import X, y
 from preprocess.base import preprocess
+from db.database import DatabaseClient
+
+
+DEV = True
+
+DEV_SERVER = "127.0.0.1"
+PROD_SERVER = "mongodb"
+
+if DEV:
+    SERVER = DEV_SERVER
+
+else:
+    SERVER = PROD_SERVER
 
 
 class Architecture(Resource):
 
     def post(self):
+        
+        # Parsing the incoming request
         request_json = request.get_json(force=True)
-        architecture, optimization, hyperparams = self._parse_request_json(
+        architecture, optimization, hyperparams, dataset = self._parse_request_json(
             request_json
         )
 
+        # Managing Datasets
+        db_client = DatabaseClient(server=SERVER)
+        X, y = db_client.get_dataset({ "name": dataset })
+        y = y.astype(int)
+
+        # Data Preprocessing
         X_train, X_test, y_train, y_test = preprocess(X, y)
 
+        # Starting the training of the Neural network
         try:
             self.nn = NeuralNetFactory.define_nn(
                 X=X_train, 
@@ -85,8 +105,9 @@ class Architecture(Resource):
         architecture = json["architecture"]
         optimization = json["optimization"]
         hyperparameters = json["hyperparameters"]
+        dataset = json["dataset"]
 
-        return architecture, optimization, hyperparameters
+        return architecture, optimization, hyperparameters, dataset
 
     @staticmethod
     def _convert_as_prediction(raw_prediction):
