@@ -10,14 +10,14 @@ from db.database import DatabaseClient
 
 DEV = True
 
-DEV_SERVER = "127.0.0.1"
-PROD_SERVER = "mongodb"
+DB_DEV_SERVER = "127.0.0.1"
+DB_PROD_SERVER = "mongodb"
 
 if DEV:
-    SERVER = DEV_SERVER
+    DB_SERVER = DB_DEV_SERVER
 
 else:
-    SERVER = PROD_SERVER
+    DB_SERVER = DB_PROD_SERVER
 
 
 class Architecture(Resource):
@@ -31,7 +31,7 @@ class Architecture(Resource):
         )
 
         # Managing Datasets
-        db_client = DatabaseClient(server=SERVER)
+        db_client = DatabaseClient(server=DB_SERVER)
         X, y = db_client.get_dataset({ "name": dataset })
         y = y.astype(int)
 

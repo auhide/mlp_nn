@@ -36,7 +36,7 @@ class DatabaseClient:
         """
         result = self.db[collection_name].find(search_dict)
 
-        return list(result)[0]
+        return list(result)
 
     def get_dataset(self, search_dict={}, collection_name=COLLECTION):
         """Returns the features (X) and labels (y) of the first matched dataset 
@@ -49,7 +49,7 @@ class DatabaseClient:
         Returns:
             tuple: A tuple representing the features and labels - X and y
         """
-        doc = self.get_documents(collection_name, search_dict)
+        doc = self.get_documents(collection_name, search_dict)[0]
         dataset = Dataset(**doc).to_numpy()
         X, y = dataset[search_dict["name"]][0], dataset[search_dict["name"]][1]
 
