@@ -13,6 +13,7 @@ class Dataset:
         full_dataset = np.array(self.data).T.astype(np.float128)
         X = full_dataset[:, :-1]
         y = full_dataset[:, -1]
+        
         return {
             self.name: [X, y]
         }
