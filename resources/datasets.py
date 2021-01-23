@@ -1,10 +1,12 @@
+import numpy as np
 from flask import request
 from flask_restful import Resource
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.manifold import MDS
 
 from db.database import DatabaseClient
 from preprocess.base import shuffle_data
 
-import numpy as np
 
 
 DEV = True
@@ -28,27 +30,24 @@ class Datasets(Resource):
         docs = self._db_client.get_documents()
         
         names = []
+        datasets_result = {}
         
         for doc in docs:
             names.append(doc["name"])
         
         for name in names:
-            X, y = self._get_features(name)
+            data_to_visualize = self._get_features(name)
+            datasets_result[name] = data_to_visualize
 
-        print(X, y)
-
-        return {
-            "result": names,
-            "features": X.tolist(),
-            "labels": y.astype(int).tolist()
-        }
+        return datasets_result
 
     def _get_features(self, name):
-        X, y = self._db_client.get_dataset({ "name": "heart_disease" })
+        X, y = self._db_client.get_dataset({ "name": name })
         X, y = shuffle_data(X, y)
         X = self._scale_features(X[:DSET_SIZE])
+        features_to_visualize = self._format_features(X, y[:DSET_SIZE])
 
-        return X, y[:DSET_SIZE]
+        return features_to_visualize
 
     @staticmethod
     def _scale_features(X):
@@ -59,3 +58,16 @@ class Datasets(Resource):
         X_2d = mds.fit_transform(X_scaled)
 
         return X_2d
+
+    @staticmethod
+    def _format_features(X, y):
+        formatted_result = []
+
+        for i, features in enumerate(X):
+            formatted_result.append({
+                "x": features[0],
+                "y": features[1],
+                "class": int(y[i])
+            })
+
+        return formatted_result
