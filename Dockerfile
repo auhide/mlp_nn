@@ -17,5 +17,9 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Exposing the 5000th container port
 EXPOSE 5000
 
+# Setting environment variables
+ENV DATABASE "mongodb"
+ENV DATASET_SIZE 100
+
 # Migrating datasets & Starting the API 
 ENTRYPOINT ["./setup_api.sh"]

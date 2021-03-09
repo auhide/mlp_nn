@@ -2,22 +2,11 @@ import numpy as np
 from flask import request
 from flask_restful import Resource
 
+from config import DB_SERVER
 from nn.overlays import NeuralNetFactory
 from nn.neural_network.evaluations import Evaluator
 from preprocess.base import preprocess
 from db.database import DatabaseClient
-
-
-DEV = True
-
-DB_DEV_SERVER = "127.0.0.1"
-DB_PROD_SERVER = "mongodb"
-
-if DEV:
-    DB_SERVER = DB_DEV_SERVER
-
-else:
-    DB_SERVER = DB_PROD_SERVER
 
 
 class Architecture(Resource):
@@ -93,13 +82,13 @@ class Architecture(Resource):
 
     @staticmethod
     def _parse_request_json(json):
-        """Casts the keys (number of neurons) to integers
+        """Takes the needed values off of the `json` and returns them as a tuple.
 
         Args:
-            json (dict): Architecture received from the POST request
+            json (dict): Raw request JSON.
 
         Returns:
-            dict: Converted JSON
+            tuple: Tuple of needed `json` values.
         """
         
         architecture = json["architecture"]
