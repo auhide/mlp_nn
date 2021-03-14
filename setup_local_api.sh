@@ -14,6 +14,7 @@ else
     # I had local problems with python -m venv, so I decided to use virtualenv.
     echo "Setuping the Virtual Environment"
     virtualenv -p python3 venv
+    pip install -r requirements.txt
 
     echo "Activating the Environment"
     source venv/bin/activate
