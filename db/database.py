@@ -1,8 +1,10 @@
 import pymongo
 
+from config import DB_SERVER
 from db.models import Dataset
 
-SERVER = "mongodb"
+
+SERVER = DB_SERVER
 DATABASE = "nnvis-data"
 COLLECTION = "datasets"
 
@@ -19,9 +21,6 @@ class DatabaseClient:
     def __init__(self, server=SERVER, port=27017, db=DATABASE):
         self.client = pymongo.MongoClient(server, port)
         self.db = self.client[db]
-
-    def insert_documents(self, data, collection_name=COLLECTION):
-        pass
 
     def get_documents(self, collection_name=COLLECTION, search_dict={}):
         """Get documents based on the collection - `collection_name` -  in which
@@ -70,11 +69,4 @@ class DatabaseClient:
 
 
 default_db_client = DatabaseClient()
-
-
-if __name__ == "__main__":
-
-    # Example code, you should run that locally, hence - the server string:
-    db_client = DatabaseClient(server="127.0.0.1")
-    X, y = db_client.get_dataset({ "name": "iris" })
 

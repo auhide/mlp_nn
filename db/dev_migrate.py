@@ -5,6 +5,7 @@ Inserts all initially needed datasets for the Neural Network API
 import os
 import csv
 
+from config import DB_SERVER
 from database import DatabaseClient
 
 # CSV_PATH = os.path.join("db", "csv_datasets")
@@ -20,7 +21,7 @@ def migrate():
 
     csv_filenames = get_csvs()
 
-    db_client = DatabaseClient(server="127.0.0.1")
+    db_client = DatabaseClient(server=DB_SERVER)
     datasets = db_client.get_collection("datasets")
 
     # Writing each csv file to the MongoDB

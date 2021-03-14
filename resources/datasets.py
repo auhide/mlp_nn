@@ -57,3 +57,17 @@ class Datasets(Resource):
             })
 
         return formatted_result
+
+
+class DatasetsNames(Resource):
+
+    def get(self):
+        self._db_client = DatabaseClient(server=DB_SERVER)
+        docs = self._db_client.get_documents()
+        
+        names = []
+        
+        for doc in docs:
+            names.append(doc["name"])
+
+        return names

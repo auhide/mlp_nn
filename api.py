@@ -6,7 +6,7 @@ from flask_cors import CORS
 from flask_restful import Resource, Api
 
 from resources.architecture import Architecture
-from resources.datasets import Datasets
+from resources.datasets import Datasets, DatasetsNames
 
 
 app = Flask(__name__)
@@ -15,6 +15,7 @@ api = Api(app)
 
 api.add_resource(Architecture, "/architecture")
 api.add_resource(Datasets, "/datasets")
+api.add_resource(DatasetsNames, "/datasets/names")
 
 
 if __name__ == '__main__':
