@@ -1,6 +1,6 @@
 echo "Starting the Mongo Database..."
 cd db/
-./start_db.sh &
+./start_db.sh
 
 echo "Inserting the default datasets..."
 cd ../
