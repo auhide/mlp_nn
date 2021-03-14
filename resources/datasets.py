@@ -65,9 +65,20 @@ class DatasetsNames(Resource):
         self._db_client = DatabaseClient(server=DB_SERVER)
         docs = self._db_client.get_documents()
         
-        names = []
+        names = {}
         
         for doc in docs:
-            names.append(doc["name"])
+            presentable_name = self._prepare_presentable_name(doc["name"])
+            names[presentable_name] = doc["name"]
 
         return names
+
+    @staticmethod
+    def _prepare_presentable_name(name):
+        presentable_name = [
+            sub_name.capitalize() 
+            for sub_name in name.split("_")
+        ]
+        presentable_name = " ".join(presentable_name)
+
+        return presentable_name
