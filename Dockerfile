@@ -19,7 +19,7 @@ EXPOSE 5000
 
 # Setting environment variables
 ENV DATABASE "mongodb"
-ENV DISPLAYED_DATASET_SIZE 20
+ENV DISPLAYED_DATASET_SIZE 150
 ENV DATASET_SIZE 150
 
 # Migrating datasets & Starting the API 
