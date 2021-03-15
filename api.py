@@ -14,7 +14,7 @@ cors = CORS(app)
 api = Api(app)
 
 api.add_resource(Architecture, "/architecture")
-api.add_resource(Datasets, "/datasets")
+api.add_resource(Datasets, "/datasets/<string:dataset_name>")
 api.add_resource(DatasetsNames, "/datasets/names")
 
 

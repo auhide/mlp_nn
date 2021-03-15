@@ -11,21 +11,13 @@ from preprocess.base import shuffle_data
 
 class Datasets(Resource):
     
-    def get(self):
+    def get(self, dataset_name):
         self._db_client = DatabaseClient(server=DB_SERVER)
         docs = self._db_client.get_documents()
         
-        names = []
-        datasets_result = {}
-        
-        for doc in docs:
-            names.append(doc["name"])
-        
-        for name in names:
-            data_to_visualize = self._get_features(name)
-            datasets_result[name] = data_to_visualize
+        chosen_dataset = self._get_features(dataset_name)
 
-        return datasets_result
+        return chosen_dataset
 
     def _get_features(self, name):
         X, y = self._db_client.get_dataset({ "name": name })
