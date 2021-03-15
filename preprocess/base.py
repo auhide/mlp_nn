@@ -1,5 +1,5 @@
 import numpy as np
-
+from config import DATASET_SIZE
 
 
 def shuffle_data(X, y):
@@ -14,6 +14,8 @@ def shuffle_data(X, y):
 def preprocess(X, y):
     X, y = shuffle_data(X, y)
     X = normalize_data(X)
+    X = X[:DATASET_SIZE]
+    y = y[:DATASET_SIZE]
 
     return train_test_split(X, y)
 

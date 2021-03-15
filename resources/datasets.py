@@ -4,7 +4,7 @@ from flask_restful import Resource
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.manifold import MDS
 
-from config import DB_SERVER, DATASET_SIZE
+from config import DB_SERVER, DISPLAYED_DATASET_SIZE
 from db.database import DatabaseClient
 from preprocess.base import shuffle_data
 
@@ -30,8 +30,8 @@ class Datasets(Resource):
     def _get_features(self, name):
         X, y = self._db_client.get_dataset({ "name": name })
         X, y = shuffle_data(X, y)
-        X = self._scale_features(X[:DATASET_SIZE])
-        features_to_visualize = self._format_features(X, y[:DATASET_SIZE])
+        X = self._scale_features(X[:DISPLAYED_DATASET_SIZE])
+        features_to_visualize = self._format_features(X, y[:DISPLAYED_DATASET_SIZE])
 
         return features_to_visualize
 

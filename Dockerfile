@@ -19,7 +19,8 @@ EXPOSE 5000
 
 # Setting environment variables
 ENV DATABASE "mongodb"
-ENV DATASET_SIZE 100
+ENV DISPLAYED_DATASET_SIZE 20
+ENV DATASET_SIZE 150
 
 # Migrating datasets & Starting the API 
 ENTRYPOINT ["./setup_api.sh"]
