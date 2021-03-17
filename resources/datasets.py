@@ -9,12 +9,16 @@ from db.database import DatabaseClient
 from preprocess.base import shuffle_data
 
 
-class Datasets(Resource):
+class DatasetsInterface(Resource):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self._db_client = DatabaseClient(server=DB_SERVER)
+
+class Datasets(DatasetsInterface):
     
     def get(self, dataset_name):
-        self._db_client = DatabaseClient(server=DB_SERVER)
-        docs = self._db_client.get_documents()
-        
         chosen_dataset = self._get_features(dataset_name)
 
         return chosen_dataset
@@ -51,10 +55,9 @@ class Datasets(Resource):
         return formatted_result
 
 
-class DatasetsNames(Resource):
+class DatasetsNames(DatasetsInterface):
 
     def get(self):
-        self._db_client = DatabaseClient(server=DB_SERVER)
         docs = self._db_client.get_documents()
         
         names = []
@@ -77,3 +80,16 @@ class DatasetsNames(Resource):
         presentable_name = " ".join(presentable_name)
 
         return presentable_name
+
+
+class DatasetsInformation(DatasetsInterface):
+
+    def get(self, dataset_name):
+        X, y = self._db_client.get_dataset({ "name": dataset_name })
+        n_features = len(X[0, :])
+        n_labels = len(set(y))
+
+        return {
+            "Features": n_features,
+            "Labels": n_labels
+        }
