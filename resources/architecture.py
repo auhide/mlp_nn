@@ -15,13 +15,13 @@ class Architecture(Resource):
         
         # Parsing the incoming request
         request_json = request.get_json(force=True)
-        architecture, optimization, hyperparams, dataset = self._parse_request_json(
+        architecture, optimization, hyperparams, dataset, features = self._parse_request_json(
             request_json
         )
 
         # Managing Datasets
         db_client = DatabaseClient(server=DB_SERVER)
-        X, y = db_client.get_dataset({ "name": dataset })
+        X, y = db_client.get_dataset({ "name": dataset }, features=features)
         y = y.astype(int)
 
         # Data Preprocessing
@@ -97,7 +97,7 @@ class Architecture(Resource):
         dataset = json["dataset"]
         features = json["features"]
 
-        return architecture, optimization, hyperparameters, dataset
+        return architecture, optimization, hyperparameters, dataset, features
 
     @staticmethod
     def _convert_as_prediction(raw_prediction):
