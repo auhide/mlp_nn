@@ -68,6 +68,12 @@ class DatabaseClient:
 
         return collection
 
+    def get_dataset_features(self, search_dict={}, collection_name=COLLECTION):
+        doc = self.get_documents(collection_name, search_dict)[0]
+        dataset = Dataset(**doc)
+        
+        return dataset.get_feature_names()
+
 
 default_db_client = DatabaseClient()
 

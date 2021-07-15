@@ -89,7 +89,10 @@ class DatasetsInformation(DatasetsInterface):
         n_features = len(X[0, :])
         n_labels = len(set(y))
 
+        feature_names = self._db_client.get_dataset_features({"name": dataset_name})
+
         return {
             "Features": n_features,
-            "Labels": n_labels
+            "Labels": n_labels,
+            "FeatureNames": feature_names
         }
