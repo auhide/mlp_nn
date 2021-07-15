@@ -77,7 +77,7 @@ def csv_to_mongo(name, filename, mongo_collection):
                         document_to_insert["data"].append([])
 
                     # Add headers' field
-                    document_to_insert["fields_ids"][str(col_i)] = headers[col_i]
+                    document_to_insert["fields_ids"][headers[col_i]] = col_i
 
             mongo_collection.insert_one(document_to_insert)
 

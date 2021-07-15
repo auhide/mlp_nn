@@ -95,6 +95,7 @@ class Architecture(Resource):
         optimization = json["optimization"]
         hyperparameters = json["hyperparameters"]
         dataset = json["dataset"]
+        features = json["features"]
 
         return architecture, optimization, hyperparameters, dataset
 

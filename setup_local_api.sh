@@ -22,5 +22,7 @@ fi
 
 python migrate.py
 
+export FLASK_ENV=development
+
 echo "Starting the API..."
 python api.py
