@@ -1,4 +1,3 @@
-import pymongo as mongo
 import numpy as np
 
 

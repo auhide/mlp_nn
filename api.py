@@ -1,9 +1,6 @@
-import json
-
-import numpy as np
-from flask import Flask, request
+from flask import Flask
 from flask_cors import CORS
-from flask_restful import Resource, Api
+from flask_restful import  Api
 
 from resources.architecture import Architecture
 from resources.datasets import Datasets, DatasetsNames, DatasetsInformation
