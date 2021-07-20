@@ -97,6 +97,9 @@ class Architecture(Resource):
         dataset = json["dataset"]
         features = json.get("features", ["all"])
 
+        if not features:
+            features = ["all"]
+
         return architecture, optimization, hyperparameters, dataset, features
 
     @staticmethod
