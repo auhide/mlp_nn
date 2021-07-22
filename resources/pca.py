@@ -7,16 +7,65 @@ from preprocess.base import normalize_data
 from db.database import DatabaseClient
 
 
+class CovarianceMatrixCreator:
+
+    @classmethod
+    def create(cls, X):
+        """Creates a covariance matrix out of an array of features.
+
+        Args:
+            X (numpy.array): NxM dimensional array.
+
+        Returns:
+            tuple: The MxM covariance matrix of the features and the mean centered `X`.
+        """
+        X = normalize_data(X)
+
+        X_centered = cls._center_data(X)
+        X_cov = cls._calc_covariance_matrix(X_centered).astype("float64")
+
+        return X_cov, X_centered
+
+    @staticmethod
+    def _center_data(X):
+        """Centers the data around the mean.
+        This method basically subtracts the mean off the matrix `X`.
+
+        Args:
+            X (numpy.matrix): The dataset matrix.
+
+        Returns:
+            numpy.matrix: The centered version of `X`.
+        """
+        # Get the mean row
+        mean_row = X.mean(0)
+        ones_matrix = np.ones(X.shape)
+
+        # Matrix with the shape of X, constructed of only mean rows
+        mean_matrix = ones_matrix * mean_row
+        X_centered = X - mean_matrix
+
+        return X_centered
+
+    @staticmethod
+    def _calc_covariance_matrix(X):
+        """Calculates the covariance matrix of `X`.
+
+        Args:
+            X (numpy.matrix): A matrix, with no restrictions in regards of its dimensions.
+
+        Returns:
+            numpy.matrix: An NxN symmetric covariance matrix.
+        """
+        return X.T.dot(X)
+
+
+# TODO: Add docstrings to this class. It is not currently used, but in the future it might be.
 class PcaTransformer:
 
     def transform(self, X, n_components, feature_names):
-        X = normalize_data(X)
-        print("Normalized:")
-        print(X)
-
         # Center data (subtract the mean off it)
-        X_centered = self._center_data(X)
-        X_cov = self._calc_covariance_matrix(X_centered).astype("float64")
+        X_cov, X_centered = CovarianceMatrixCreator.create(X)
         
         # Calculate the Eigenvectors & Eigenvalues
         eig_values, eig_vectors = np.linalg.eig(X_cov)
@@ -59,45 +108,12 @@ class PcaTransformer:
             feature_index, vec_magnitude = vector_magnitudes[i]
             top_n_features.append(features[feature_index])
 
-            # Adding the vectors to a matrix
+            # Adding the principle component eigenvectors to a 2D matrix
             principal_vectors.append(evectors[feature_index])
 
         principal_vectors = np.array(principal_vectors)
 
         return top_n_features, principal_vectors
-
-    @staticmethod
-    def _center_data(X):
-        """Centers the data around the mean.
-        This method basically subtracts the mean off the matrix `X`.
-
-        Args:
-            X (numpy.matrix): The dataset matrix.
-
-        Returns:
-            numpy.matrix: The centered version of `X`.
-        """
-        # Get the mean row
-        mean_row = X.mean(0)
-        ones_matrix = np.ones(X.shape)
-
-        # Matrix with the shape of X, constructed of only mean rows
-        mean_matrix = ones_matrix * mean_row
-        X_centered = X - mean_matrix
-
-        return X_centered
-
-    @staticmethod
-    def _calc_covariance_matrix(X):
-        """Calculates the covariance matrix of `X`.
-
-        Args:
-            X (numpy.matrix): A matrix, with no restrictions in regards of its dimensions.
-
-        Returns:
-            numpy.matrix: An NxN symmetric covariance matrix.
-        """
-        return X.T.dot(X)
 
 
 class PrincipalComponentAnalysis(Resource):
@@ -111,7 +127,7 @@ class PrincipalComponentAnalysis(Resource):
         db_client = DatabaseClient(server=DB_SERVER)
         X, _ = db_client.get_dataset({ "name": dataset_name }, features=features)
         pca_transformer = PcaTransformer()
-        
+
         # Transforming the dataset into an array of principle components
         top_n_features, principal_components_matrix = pca_transformer.transform(
             X=X, 
