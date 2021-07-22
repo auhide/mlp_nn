@@ -60,7 +60,6 @@ class CovarianceMatrixCreator:
         return X.T.dot(X)
 
 
-# TODO: Add docstrings to this class. It is not currently used, but in the future it might be.
 class PcaTransformer:
 
     def transform(self, X, n_components, feature_names):
@@ -73,14 +72,14 @@ class PcaTransformer:
         print("\n\n")
         print(eig_values)
         
-        top_n_features, principal_vectors = self._get_top_n_components(
+        top_n_features, principal_vectors_matrix = self._get_top_n_components(
             evectors=eig_vectors,
             evalues=eig_values,
             n=n_components,
             features=feature_names
         )
 
-        principal_components_matrix = X_centered.dot(principal_vectors.T)
+        principal_components_matrix = X_centered.dot(principal_vectors_matrix.T)
 
         return top_n_features, principal_components_matrix
 
@@ -102,11 +101,14 @@ class PcaTransformer:
         print("By Magnitude:")
         print(vector_magnitudes)
 
-        top_n_features = []
+        top_n_features = {}
         # Filtering out the first `n` eigenvectors sorted by magnitude
+        magnitudes_sum = sum([mag for feature_i, mag in vector_magnitudes])
         for i in range(n):
             feature_index, vec_magnitude = vector_magnitudes[i]
-            top_n_features.append(features[feature_index])
+
+            magnitude_ratio = vec_magnitude / magnitudes_sum
+            top_n_features[features[feature_index]] = magnitude_ratio * 100
 
             # Adding the principle component eigenvectors to a 2D matrix
             principal_vectors.append(evectors[feature_index])
@@ -122,6 +124,7 @@ class PrincipalComponentAnalysis(Resource):
         # Parsing the request
         request_json = request.get_json(force=True)
         dataset_name, features, n_components = self._parse_request_json(request_json)
+        print(f"Features: {features}")
 
         # Getting the dataset
         db_client = DatabaseClient(server=DB_SERVER)
@@ -134,10 +137,10 @@ class PrincipalComponentAnalysis(Resource):
             n_components=n_components,
             feature_names=features
         )
-        print(principal_components_matrix)
-        print(top_n_features)
 
-        return request_json
+        return {
+            "FeatureWeights": top_n_features
+        }
 
     @staticmethod
     def _parse_request_json(request):
