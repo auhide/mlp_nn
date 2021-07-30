@@ -4,7 +4,7 @@ from flask_restful import Resource
 
 from config import DB_SERVER
 from preprocess.base import normalize_data
-from db.database import DatabaseClient
+from db.models import Dataset
 
 
 class CovarianceMatrixCreator:
@@ -127,8 +127,12 @@ class PrincipalComponentAnalysis(Resource):
         print(f"Features: {features}")
 
         # Getting the dataset
-        db_client = DatabaseClient(server=DB_SERVER)
-        X, _ = db_client.get_dataset({ "name": dataset_name }, features=features)
+        dataset = Dataset(name=dataset_name, selected_features=features)
+        X, _ = dataset.X, dataset.y
+
+        if features == "all":
+            features = dataset.feature_names
+
         pca_transformer = PcaTransformer()
 
         # Transforming the dataset into an array of principle components
