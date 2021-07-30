@@ -57,27 +57,15 @@ def csv_to_mongo(name, filename, mongo_collection):
 
         with open(filename, "r") as f:
             reader = csv.reader(f)
-            reader = list(reader)
-            cols = len(reader[0])
-            headers = reader[0]
+            # Reading the Headers of the dataset
+            headers = next(reader)
             document_to_insert = {}
             document_to_insert["name"] = name
-            document_to_insert["data"] = []
             document_to_insert["features_ids"] = {}
 
-            for i, row in enumerate(reader):
-
-                for col_i in range(cols):
-                    
-                    # Add datasets' field
-                    try:
-                        document_to_insert["data"][col_i].append(row[col_i])
-                    
-                    except IndexError:
-                        document_to_insert["data"].append([])
-
-                    # Add headers' field
-                    document_to_insert["features_ids"][headers[col_i]] = col_i
+            for i, header in enumerate(headers):
+                # Add headers' field to the DB
+                document_to_insert["features_ids"][header] = i
 
             mongo_collection.insert_one(document_to_insert)
 

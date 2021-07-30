@@ -6,7 +6,7 @@ from config import DB_SERVER
 from nn.overlays import NeuralNetFactory
 from nn.neural_network.evaluations import Evaluator
 from preprocess.base import preprocess
-from db.database import DatabaseClient
+from db.models import Dataset
 
 
 class Architecture(Resource):
@@ -19,9 +19,9 @@ class Architecture(Resource):
             request_json
         )
 
-        # Managing Datasets
-        db_client = DatabaseClient(server=DB_SERVER)
-        X, y = db_client.get_dataset({ "name": dataset }, features=features)
+        dataset = Dataset(name=dataset, selected_features=features)
+        X, y = dataset.X, dataset.y
+        
         y = y.astype(int)
 
         # Data Preprocessing

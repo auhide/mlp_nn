@@ -17,6 +17,7 @@ api.add_resource(Architecture, "/architecture")
 api.add_resource(Datasets, "/datasets/<string:dataset_name>")
 api.add_resource(DatasetsNames, "/datasets/names")
 api.add_resource(DatasetsInformation, "/datasets/info/<string:dataset_name>")
+
 api.add_resource(PrincipalComponentAnalysis, "/pca")
 
 
