@@ -4,20 +4,17 @@ from flask_restful import Resource
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.manifold import MDS
 
-from config import DB_SERVER, DISPLAYED_DATASET_SIZE
-from db.database import DatabaseClient
+from config import DISPLAYED_DATASET_SIZE
 from db.models import Dataset
 from preprocess.base import shuffle_data
 
 
-class DatasetsInterface(Resource):
+class DatasetsResource(Resource):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        self._db_client = DatabaseClient(server=DB_SERVER)
 
-class Datasets(DatasetsInterface):
+class Datasets(DatasetsResource):
     
     def get(self, dataset_name):
         chosen_dataset = self._get_features(dataset_name)
@@ -58,7 +55,7 @@ class Datasets(DatasetsInterface):
         return formatted_result
 
 
-class DatasetsNames(DatasetsInterface):
+class DatasetsNames(DatasetsResource):
 
     def get(self):
         docs = self._db_client.get_collection_documents()
@@ -85,17 +82,17 @@ class DatasetsNames(DatasetsInterface):
         return presentable_name
 
 
-class DatasetsInformation(DatasetsInterface):
+class DatasetsInformation(DatasetsResource):
 
     def get(self, dataset_name):
-        X, y = self._db_client.get_dataset({ "name": dataset_name })
+        selected_dataset = Dataset(name=dataset_name)
+        X, y = selected_dataset.X, selected_dataset.y
+
         n_features = len(X[0, :])
         n_labels = len(set(y))
-
-        feature_names = self._db_client.get_dataset_features({"name": dataset_name})
 
         return {
             "Features": n_features,
             "Labels": n_labels,
-            "FeatureNames": feature_names
+            "FeatureNames": selected_dataset.features
         }

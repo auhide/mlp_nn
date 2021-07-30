@@ -14,9 +14,7 @@ class Dataset:
         self.selected_features = selected_features
 
         self.features = self._generate_features()
-        print(self.features)
         self.selected_feature_ids = self._get_features_ids()
-        print(self.selected_feature_ids)
         
         self.X, self.y = self._generate_dataset()
 
