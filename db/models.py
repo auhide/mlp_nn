@@ -9,13 +9,14 @@ CSV_PATH = os.path.join("db", "csv_datasets")
 # TODO: Add docstrings to these methods
 class Dataset:
     
-    def __init__(self, name, selected_features):
+    def __init__(self, name, selected_features="all"):
         self.name = name
         self.selected_features = selected_features
 
         self.features = self._generate_features()
         print(self.features)
         self.selected_feature_ids = self._get_features_ids()
+        print(self.selected_feature_ids)
         
         self.X, self.y = self._generate_dataset()
 
@@ -28,6 +29,9 @@ class Dataset:
         Returns:
             list: The list of the feature ids.
         """
+        if self.selected_features == "all":
+            return list(self.features.values())
+
         selected_ids = []
 
         for name in self.selected_features:

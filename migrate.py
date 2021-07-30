@@ -64,8 +64,9 @@ def csv_to_mongo(name, filename, mongo_collection):
             document_to_insert["features_ids"] = {}
 
             for i, header in enumerate(headers):
-                # Add headers' field to the DB
-                document_to_insert["features_ids"][header] = i
+                if i != len(headers) - 1:
+                    # Add headers' field to the DB
+                    document_to_insert["features_ids"][header] = i
 
             mongo_collection.insert_one(document_to_insert)
 

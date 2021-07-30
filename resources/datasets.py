@@ -6,6 +6,7 @@ from sklearn.manifold import MDS
 
 from config import DB_SERVER, DISPLAYED_DATASET_SIZE
 from db.database import DatabaseClient
+from db.models import Dataset
 from preprocess.base import shuffle_data
 
 
@@ -24,7 +25,9 @@ class Datasets(DatasetsInterface):
         return chosen_dataset
 
     def _get_features(self, name):
-        X, y = self._db_client.get_dataset({ "name": name })
+        selected_dataset = Dataset(name=name)
+        X, y = selected_dataset.X, selected_dataset.y
+
         X, y = shuffle_data(X, y)
         X = self._scale_features(X[:DISPLAYED_DATASET_SIZE])
         features_to_visualize = self._format_features(X, y[:DISPLAYED_DATASET_SIZE])
@@ -58,7 +61,7 @@ class Datasets(DatasetsInterface):
 class DatasetsNames(DatasetsInterface):
 
     def get(self):
-        docs = self._db_client.get_documents()
+        docs = self._db_client.get_collection_documents()
         
         names = []
         

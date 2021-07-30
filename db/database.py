@@ -35,6 +35,9 @@ class DatabaseClient:
 
         return collection
 
+    def get_collection_documents(self, collection_name=COLLECTION):
+        return self.db[collection_name].find()
+
     def get_dataset_metadata(self, name=None, collection_name=COLLECTION):
         return self.db[collection_name].find_one({
                 "name": name
@@ -43,7 +46,6 @@ class DatabaseClient:
 
     def get_dataset_features(self, search_dict={}, collection_name=COLLECTION):
         doc = self.get_documents(collection_name, search_dict)[0]
-        print(doc)
         
         return doc
 
