@@ -2,7 +2,6 @@ import numpy as np
 from flask import request
 from flask_restful import Resource
 
-from config import DB_SERVER
 from preprocess.base import normalize_data
 from db.models import Dataset
 
@@ -68,9 +67,6 @@ class PcaTransformer:
         
         # Calculate the Eigenvectors & Eigenvalues
         eig_values, eig_vectors = np.linalg.eig(X_cov)
-        print(eig_vectors)
-        print("\n\n")
-        print(eig_values)
         
         top_n_features, principal_vectors_matrix = self._get_top_n_components(
             evectors=eig_vectors,
@@ -98,8 +94,6 @@ class PcaTransformer:
 
         # Sorting the list of tuples by the second element
         vector_magnitudes.sort(key=lambda x: x[1], reverse=True)
-        print("By Magnitude:")
-        print(vector_magnitudes)
 
         top_n_features = {}
         # Filtering out the first `n` eigenvectors sorted by magnitude
@@ -123,8 +117,8 @@ class PrincipalComponentAnalysis(Resource):
     def post(self):
         # Parsing the request
         request_json = request.get_json(force=True)
+        print("Raw Request:", request_json)
         dataset_name, features, n_components = self._parse_request_json(request_json)
-        print(f"Features: {features}")
 
         # Getting the dataset
         dataset = Dataset(name=dataset_name, selected_features=features)
