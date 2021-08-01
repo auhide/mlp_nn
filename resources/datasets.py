@@ -6,6 +6,7 @@ from sklearn.manifold import MDS
 
 from config import DISPLAYED_DATASET_SIZE
 from db.models import Dataset
+from db.database import DatabaseClient
 from preprocess.base import shuffle_data
 
 
@@ -13,6 +14,7 @@ class DatasetsResource(Resource):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._db_client = DatabaseClient()
 
 class Datasets(DatasetsResource):
     
@@ -94,5 +96,5 @@ class DatasetsInformation(DatasetsResource):
         return {
             "Features": n_features,
             "Labels": n_labels,
-            "FeatureNames": selected_dataset.features
+            "FeatureNames": selected_dataset.feature_names
         }

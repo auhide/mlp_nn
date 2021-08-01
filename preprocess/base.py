@@ -35,6 +35,10 @@ def normalize_data(X):
     X_transposed = X.T
 
     for col_i in range(len(cols_max)):
+        
+        if cols_max[col_i] == 0:
+            cols_max[col_i] = 1
+
         X_transposed[col_i] = X_transposed[col_i] / cols_max[col_i]
     
     X = X_transposed.T

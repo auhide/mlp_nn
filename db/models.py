@@ -11,9 +11,10 @@ class Dataset:
     
     def __init__(self, name, selected_features="all"):
         self.name = name
+        
+        self.features = self._generate_features()
         self.selected_features = selected_features
 
-        self.features = self._generate_features()
         self.feature_names = list(self.features.keys())
         self.selected_feature_ids = self._get_features_ids()
         
