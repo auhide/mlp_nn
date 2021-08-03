@@ -154,6 +154,9 @@ class Architecture(Resource):
         """
         if request["pca"]:
             n_components = request["pca_options"]["n_components"]
+            
+            if n_components == 0:
+                n_components = len(feature_names)
 
             pca_transformer = PcaTransformer()
 
