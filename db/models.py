@@ -62,8 +62,6 @@ class Dataset:
         csv_datasets = self._get_csvs()
         dataset_index = None
 
-        print(csv_datasets)
-
         dataset_index = csv_datasets.index(f"{self.name}.csv")
 
         if dataset_index == None:

@@ -7,6 +7,7 @@ from nn.overlays import NeuralNetFactory
 from nn.neural_network.evaluations import Evaluator
 from preprocess.base import preprocess
 from db.models import Dataset
+from resources.pca import PcaTransformer
 
 
 class Architecture(Resource):

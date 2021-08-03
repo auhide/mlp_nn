@@ -31,10 +31,10 @@ class CovarianceMatrixCreator:
         This method basically subtracts the mean off the matrix `X`.
 
         Args:
-            X (numpy.matrix): The dataset matrix.
+            X (numpy.array): The dataset matrix.
 
         Returns:
-            numpy.matrix: The centered version of `X`.
+            numpy.array: The centered version of `X`.
         """
         # Get the mean row
         mean_row = X.mean(0)
@@ -51,10 +51,10 @@ class CovarianceMatrixCreator:
         """Calculates the covariance matrix of `X`.
 
         Args:
-            X (numpy.matrix): A matrix, with no restrictions in regards of its dimensions.
+            X (numpy.array): A matrix, with no restrictions in regards of its dimensions.
 
         Returns:
-            numpy.matrix: An NxN symmetric covariance matrix.
+            numpy.array: An NxN symmetric covariance matrix.
         """
         return X.T.dot(X)
 
@@ -62,6 +62,19 @@ class CovarianceMatrixCreator:
 class PcaTransformer:
 
     def transform(self, X, n_components, feature_names):
+        """Transforms the feature matrix `X` into a matrix with size - 
+        `n_components` consisting of the most significant components 
+        (transformed features).
+
+        Args:
+            X (numpy.array): The matrix of features.
+            n_components (int): The number of significant components selected for filtering.
+            feature_names (list): The names of the features (the name of each column in `X`).
+
+        Returns:
+            tuple: A dictionary with the top n features and a their percentages and
+            a numpy array with the transformed feature matrix.
+        """
         # Center data (subtract the mean off it)
         X_cov, X_centered = CovarianceMatrixCreator.create(X)
         
@@ -81,6 +94,20 @@ class PcaTransformer:
 
     @staticmethod
     def _get_top_n_components(evectors, evalues, n, features):
+        """Based on the eigenvectors (`evectors`) and eigenvalues (`evalues`), 
+        this method generates the top `n` components.
+
+        Args:
+            evectors (numpy.array): An array of the eigenvectors.
+            evalues (numpy.array): A vector of the eigenvalues.
+            n (int): The number of significant components to be selected.
+            features (list): The names of the features.
+
+        Returns:
+            tuple: A dictionary with the top n features and a their percentages and
+            an array with the principle vectors that can be used for a transformation
+            of the feature vectors.
+        """
         vector_magnitudes = []
         principal_vectors = []
 
@@ -117,7 +144,6 @@ class PrincipalComponentAnalysis(Resource):
     def post(self):
         # Parsing the request
         request_json = request.get_json(force=True)
-        print("Raw Request:", request_json)
         dataset_name, features, n_components = self._parse_request_json(request_json)
 
         # Getting the dataset
