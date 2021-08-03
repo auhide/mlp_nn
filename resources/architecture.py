@@ -22,9 +22,15 @@ class Architecture(Resource):
 
         dataset = Dataset(name=dataset, selected_features=features)
         X, y = dataset.X, dataset.y
+        # Using the features from the Dataset object, because when the selected
+        # features are equivalent to the string "all", the Dataset class
+        # converts them into the proper list of feature names.
+        selected_features = dataset.feature_names
         
-        y = y.astype(int)
+        X = self._execute_pca(X, request_json, selected_features)
 
+        y = y.astype(int)
+        
         # Data Preprocessing
         X_train, X_test, y_train, y_test = preprocess(X, y)
 
@@ -132,3 +138,30 @@ class Architecture(Resource):
                 converted_conf_mtx.append(single_element)
 
         return converted_conf_mtx
+
+    @staticmethod
+    def _execute_pca(X, request, feature_names):
+        """Runs PCA on the features matrix if the `pca` option inside of `request`
+        is set to `True`.
+
+        Args:
+            X (numpy.array): The array of selected features.
+            request (dict): The raw request to the API.
+            feature_names (list): The list of feature names.
+
+        Returns:
+            numpy.array: The matrix of principle components (the converted features).
+        """
+        if request["pca"]:
+            n_components = request["pca_options"]["n_components"]
+
+            pca_transformer = PcaTransformer()
+
+            # Transforming the dataset into an array of principle components
+            _, X = pca_transformer.transform(
+                X=X, 
+                n_components=n_components,
+                feature_names=feature_names
+            )
+
+        return X
