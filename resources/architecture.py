@@ -102,10 +102,10 @@ class Architecture(Resource):
         optimization = json["optimization"]
         hyperparameters = json["hyperparameters"]
         dataset = json["dataset"]
-        features = json.get("features", ["all"])
+        features = json.get("features", "all")
 
         if not features:
-            features = ["all"]
+            features = "all"
 
         return architecture, optimization, hyperparameters, dataset, features
 
