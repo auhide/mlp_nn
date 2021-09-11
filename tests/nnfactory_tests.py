@@ -1,9 +1,6 @@
-"""
-"""
-
 import unittest
+
 from nn.overlays import (
-    neuralnet_with_optimizer,
     NeuralNetFactory,
     NeuralNetwork,
     AdamOptimizer
@@ -12,10 +9,6 @@ from nn.neural_network.exceptions import OptimizerDoesNotExist
 
 
 class TestNeuralNetFactory(unittest.TestCase):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # TODO: Add attributes that will be used in multiple tests
     
     def test_valid_neuralnet_descendant(self):
         """

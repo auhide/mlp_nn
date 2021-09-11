@@ -4,6 +4,7 @@ import numpy as np
 
 __all__ = ["Evaluator"]
 
+
 class ConfusionMatrix:
     
     @classmethod

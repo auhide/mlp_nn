@@ -14,4 +14,7 @@ else
     source venv/bin/activate
 fi
 
-python -m unittest discover tests/ -v -p '*_test.py'
+pip install coverage==5.5
+
+coverage run --source=./nn -m unittest discover -s tests/ -p "*_tests.py"
+coverage html
