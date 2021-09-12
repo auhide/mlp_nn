@@ -1,11 +1,11 @@
 """
-Inserts all initially needed datasets for the Neural Network API
+Inserts all initially needed info about the datasets for the Neural Network API
 """
-
 import os
 import csv
 
 from db.database import default_db_client
+
 
 CSV_PATH = os.path.join("db", "csv_datasets")
 
@@ -78,6 +78,3 @@ def csv_to_mongo(name, filename, mongo_collection):
 
 if __name__ == "__main__":
     datasets = migrate()
-
-    print(list(datasets.find()))
-    print(len(list(datasets.find())))
