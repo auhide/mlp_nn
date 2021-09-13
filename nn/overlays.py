@@ -70,6 +70,8 @@ class NeuralNetFactory:
         Returns:
             NeuralNet: The defined Neural Network
         """
+        cls._validate_architecture_dimensions(architecture_dict)
+
         if not cls._architecture_is_valid(architecture_dict):
             raise WrongNNArchitecture("All layers' neurons must be greater than 1")
 
@@ -100,3 +102,14 @@ class NeuralNetFactory:
                 return False
 
         return True
+
+    @classmethod
+    def _validate_architecture_dimensions(self, architecture):
+        
+        if len(architecture.keys()) > 10:
+            raise Exception("The layers must be at most 10!")
+
+        for layer_i, neurons in architecture.items():
+            
+            if neurons > 100:
+                raise Exception("The layer neurons must be at most 100!")

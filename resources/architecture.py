@@ -16,6 +16,7 @@ class Architecture(Resource):
         
         # Parsing the incoming request
         request_json = request.get_json(force=True)
+
         architecture, optimization, hyperparams, dataset, features = self._parse_request_json(
             request_json
         )

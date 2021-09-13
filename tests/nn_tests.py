@@ -89,3 +89,38 @@ class TestNeuralNetwork(unittest.TestCase):
         prediction = self.train(X_test=X_test, optimizer="adam")
         
         self.assertTrue(prediction == expected_prediction)
+
+    def test_layers_exceeded(self):
+        curr_architecture = {
+            "1": 3,
+            "2": 4,
+            "3": 3,
+            "4": 3,
+            "5": 4,
+            "6": 3,
+            "7": 3,
+            "8": 4,
+            "9": 3,
+            "10": 3,
+            "11": 2
+        }
+
+        with self.assertRaises(Exception):
+            nn = NeuralNetFactory.define_nn(
+                architecture_dict=curr_architecture, 
+                X=self.X, 
+                y=self.y
+            )
+
+    def test_layers_exceeded(self):
+        curr_architecture = {
+            "1": 101,
+            "2": 2,
+        }
+
+        with self.assertRaises(Exception):
+            nn = NeuralNetFactory.define_nn(
+                architecture_dict=curr_architecture, 
+                X=self.X, 
+                y=self.y
+            )
