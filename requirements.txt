@@ -43,7 +43,7 @@ scipy==1.5.2
 six==1.15.0
 sklearn==0.0
 threadpoolctl==2.1.0
-urllib3==1.25.8
+urllib3==1.26.5
 webencodings==0.5.1
 Werkzeug==1.0.1
 dnspython==2.1.0
