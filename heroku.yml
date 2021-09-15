@@ -5,5 +5,5 @@ build:
 run:
   web:
     command:
-      - python3 api.py
+      - ./setup_api.sh
     image: web
