@@ -2,8 +2,8 @@ build:
   docker:
     web: Dockerfile.prod
 
-  run:
-    api:
-      command:
-        - gunicorn api:app
-      image: web
+run:
+  api:
+    command:
+      - gunicorn api:app
+    image: web
