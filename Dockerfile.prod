@@ -5,11 +5,11 @@ RUN apt-get update -y
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 
-# Going to the working directory (in the container)
-WORKDIR /app
-
 # Copy all local files to the container
 COPY . /app
+
+# Going to the working directory (in the container)
+WORKDIR /app
 
 # Installing all needed modules
 RUN pip3 install --no-cache-dir -r requirements.txt
@@ -26,4 +26,5 @@ ENV DISPLAYED_DATASET_SIZE 150
 ENV DATASET_SIZE 150
 
 # Migrating datasets & Starting the API 
-ENTRYPOINT ["./setup_api.sh"]
+ENTRYPOINT [ "python" ]
+CMD ["api.py"]
