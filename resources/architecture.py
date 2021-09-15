@@ -2,7 +2,6 @@ import numpy as np
 from flask import request
 from flask_restful import Resource
 
-from config import DB_SERVER
 from nn.overlays import NeuralNetFactory
 from nn.neural_network.evaluations import Evaluator
 from preprocess.base import preprocess

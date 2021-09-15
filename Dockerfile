@@ -20,7 +20,9 @@ EXPOSE 5000
 ENV ENV "DEV"
 
 # Setting environment variables
-ENV DATABASE "mongodb"
+ENV DB_HOST "mongodb"
+ENV DB_CLUSTER "datasets"
+
 ENV DISPLAYED_DATASET_SIZE 150
 ENV DATASET_SIZE 150
 

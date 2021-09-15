@@ -1,12 +1,11 @@
 import pymongo
 from pymongo import collection
 
-from config import DB_SERVER
+from config import ENV, DB_HOST, DB_PASSWORD, DB_CLUSTER
 
 
-SERVER = DB_SERVER
-DATABASE = "nnvis-data"
 COLLECTION = "datasets"
+DB_URI = f"mongodb+srv://admin:{DB_PASSWORD}@neuroad-cluster.avc2u.mongodb.net/{DB_CLUSTER}?retryWrites=true&w=majority"
 
 
 class DatabaseClient:
@@ -18,8 +17,14 @@ class DatabaseClient:
         db (string, optional): The database with which we communicate. Defaults to "nnvis-data".
     """
 
-    def __init__(self, server=SERVER, port=27017, db=DATABASE):
-        self.client = pymongo.MongoClient(server, port)
+    def __init__(self, server=DB_HOST, port=27017, db=DB_CLUSTER):
+
+        if ENV == "PROD":
+            self.client = pymongo.MongoClient(DB_URI)
+            
+        else:
+            self.client = pymongo.MongoClient(server, port)
+
         self.db = self.client[db]
 
     def get_collection(self, collection_name=COLLECTION):
