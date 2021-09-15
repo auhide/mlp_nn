@@ -3,7 +3,7 @@ build:
     web: Dockerfile.prod
 
 run:
-  api:
+  web:
     command:
       - gunicorn api:app
     image: web

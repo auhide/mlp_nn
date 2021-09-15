@@ -26,5 +26,3 @@ ENV DISPLAYED_DATASET_SIZE 150
 ENV DATASET_SIZE 150
 
 # Migrating datasets & Starting the API 
-ENTRYPOINT [ "python" ]
-CMD ["api.py"]
