@@ -17,6 +17,8 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Exposing the 5000th container port
 EXPOSE 5000
 
+ENV ENV "DEV"
+
 # Setting environment variables
 ENV DATABASE "mongodb"
 ENV DISPLAYED_DATASET_SIZE 150

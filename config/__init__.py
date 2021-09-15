@@ -2,8 +2,11 @@
 import os
 
 
+ENV = os.environ.get("ENV", "DEV")
+
 FLASK_HOST = os.environ.get("FLASK_HOST", "0.0.0.0")
-FLASK_PORT = int(os.environ.get("FLASK_PORT", 5000))
+FLASK_PORT = int(os.environ.get("PORT", 5000))
+
 DEBUG = os.environ.get("DEBUG", True)
 
 # The Docker container is passing 'mongodb' as a DATABASE env. variable.
