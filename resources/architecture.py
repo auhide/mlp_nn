@@ -11,7 +11,7 @@ from nn.neural_network.evaluations import Evaluator
 from preprocess.base import preprocess
 from db.models import Dataset
 from resources.pca import PcaTransformer
-from resources.model import ModelSerializer, NeuroadNetwork
+from resources.model import ModelSerializer
 
 
 class Architecture(Resource):
@@ -74,9 +74,12 @@ class Architecture(Resource):
         weights = self._parse_nn_weights(self.nn._layers)
 
         # Generating the model that is going to be shared as a .pickle file
+        model_data = {}
         shared_weights = self._get_layer_weights(self.nn._layers)
-        shared_model = NeuroadNetwork(shared_weights, hyperparams["activation"])
-        ModelSerializer._save_model(shared_model)
+        model_data["weights"] = shared_weights
+        model_data["architecture"] = architecture
+
+        ModelSerializer._save_model(model_data)
 
         return {
             "StatusCode": 200,
