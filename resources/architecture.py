@@ -78,6 +78,7 @@ class Architecture(Resource):
         shared_weights = self._get_layer_weights(self.nn._layers)
         model_data["weights"] = shared_weights
         model_data["architecture"] = architecture
+        model_data["activation"] = hyperparams["activation"]
 
         ModelSerializer._save_model(model_data)
 
