@@ -20,6 +20,7 @@ def migrate():
     csv_filenames = get_csvs()
 
     datasets = default_db_client.get_collection("datasets")
+    _clear_collection(datasets)
 
     # Writing each csv file to the MongoDB
     for filename in csv_filenames:
@@ -74,6 +75,12 @@ def csv_to_mongo(name, filename, mongo_collection):
 
     else:
         return False
+
+
+def _clear_collection(collection):
+    
+    if collection.estimated_document_count() != 0:
+        collection.drop()
 
 
 if __name__ == "__main__":
