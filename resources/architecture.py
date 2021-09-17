@@ -21,11 +21,11 @@ class Architecture(Resource):
         # Parsing the incoming request
         request_json = request.get_json(force=True)
 
-        architecture, optimization, hyperparams, dataset, features = self._parse_request_json(
+        architecture, optimization, hyperparams, dataset_name, features = self._parse_request_json(
             request_json
         )
 
-        dataset = Dataset(name=dataset, selected_features=features)
+        dataset = Dataset(name=dataset_name, selected_features=features)
         X, y = dataset.X, dataset.y
         # Using the features from the Dataset object, because when the selected
         # features are equivalent to the string "all", the Dataset class
@@ -78,9 +78,11 @@ class Architecture(Resource):
         shared_weights = self._get_layer_weights(self.nn._layers)
         model_data["weights"] = shared_weights
         model_data["architecture"] = architecture
-        model_data["activation"] = hyperparams["activation"]
+        model_data["hyperparameters"] = hyperparams
+        model_data["optimizer"] = optimization
+        model_data["dataset"] = dataset_name
 
-        ModelSerializer._save_model(model_data)
+        ModelSerializer.serialize(model_data)
 
         return {
             "StatusCode": 200,

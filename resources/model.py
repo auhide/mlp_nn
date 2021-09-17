@@ -17,7 +17,7 @@ class Model(Resource):
 class ModelSerializer:
 
     @classmethod
-    def _save_model(cls, model):
+    def serialize(cls, model):
         model_copy = copy.deepcopy(model)
         path = os.path.join(".", "models", "model.pickle")
         

@@ -25,6 +25,7 @@ api.add_resource(PrincipalComponentAnalysis, "/pca")
 api.add_resource(Model, "/model")
 
 
+# Using this method for the download of the model.
 @api.representation('application/octet-stream')
 def output_file(data, code, headers):
     filepath = safe_join(data["directory"], data["filename"])
