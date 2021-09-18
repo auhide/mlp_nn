@@ -1,3 +1,7 @@
+import os
+import copy
+import pickle
+
 import numpy as np
 from flask import request
 from flask_restful import Resource
@@ -7,6 +11,7 @@ from nn.neural_network.evaluations import Evaluator
 from preprocess.base import preprocess
 from db.models import Dataset
 from resources.pca import PcaTransformer
+from resources.model import ModelSerializer
 
 
 class Architecture(Resource):
@@ -16,11 +21,11 @@ class Architecture(Resource):
         # Parsing the incoming request
         request_json = request.get_json(force=True)
 
-        architecture, optimization, hyperparams, dataset, features = self._parse_request_json(
+        architecture, optimization, hyperparams, dataset_name, features = self._parse_request_json(
             request_json
         )
 
-        dataset = Dataset(name=dataset, selected_features=features)
+        dataset = Dataset(name=dataset_name, selected_features=features)
         X, y = dataset.X, dataset.y
         # Using the features from the Dataset object, because when the selected
         # features are equivalent to the string "all", the Dataset class
@@ -45,6 +50,7 @@ class Architecture(Resource):
             )
 
             self.nn.fit()
+
             prediction = self._convert_as_prediction(
                 self.nn.predict(X_test)
             )
@@ -63,7 +69,20 @@ class Architecture(Resource):
                 "Message": str(e)
             }
 
+        # The ways that are returned in the response of the API.
+        # They might be used in the UI.
         weights = self._parse_nn_weights(self.nn._layers)
+
+        # Generating the model that is going to be shared as a .pickle file
+        model_data = {}
+        shared_weights = self._get_layer_weights(self.nn._layers)
+        model_data["weights"] = shared_weights
+        model_data["architecture"] = architecture
+        model_data["hyperparameters"] = hyperparams
+        model_data["optimizer"] = optimization
+        model_data["dataset"] = dataset_name
+
+        ModelSerializer.serialize(model_data)
 
         return {
             "StatusCode": 200,
@@ -86,6 +105,15 @@ class Architecture(Resource):
             parsed_weights_dict[i+1] = weights
 
         return parsed_weights_dict
+
+    @staticmethod
+    def _get_layer_weights(layers):
+        weights = []
+
+        for layer in layers:
+            weights.append(layer.weights)
+
+        return weights
 
     @staticmethod
     def _parse_request_json(json):
