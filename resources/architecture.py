@@ -21,7 +21,7 @@ class Architecture(Resource):
         # Parsing the incoming request
         request_json = request.get_json(force=True)
 
-        architecture, optimization, hyperparams, dataset_name, features = self._parse_request_json(
+        architecture, optimization, hyperparams, dataset_name, features, train_size = self._parse_request_json(
             request_json
         )
 
@@ -37,7 +37,7 @@ class Architecture(Resource):
         y = y.astype(int)
         
         # Data Preprocessing
-        X_train, X_test, y_train, y_test = preprocess(X, y)
+        X_train, X_test, y_train, y_test = preprocess(X, y, train_size)
 
         # Starting the training of the Neural network
         try:
@@ -131,11 +131,12 @@ class Architecture(Resource):
         hyperparameters = json["hyperparameters"]
         dataset = json["dataset"]
         features = json.get("features", "all")
+        train_size = json.get("train_size", 0.7)
 
         if not features:
             features = "all"
 
-        return architecture, optimization, hyperparameters, dataset, features
+        return architecture, optimization, hyperparameters, dataset, features, train_size
 
     @staticmethod
     def _convert_as_prediction(raw_prediction):
