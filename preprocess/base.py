@@ -11,13 +11,13 @@ def shuffle_data(X, y):
     return X, y
 
 
-def preprocess(X, y):
+def preprocess(X, y, train_size):
     X, y = shuffle_data(X, y)
     X = normalize_data(X)
     X = X[:DATASET_SIZE]
     y = y[:DATASET_SIZE]
 
-    return train_test_split(X, y)
+    return train_test_split(X, y, train_size)
 
 
 def train_test_split(X, y, train_size=0.7):
