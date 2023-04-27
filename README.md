@@ -1,5 +1,5 @@
 # Multilayer Perceptron API Implemented From Scratch With NumPy
-The project was deployed on Heroku but currently it's not deployed anywhere. The repository of the UI is [this one](https://github.com/auhide/nnvis-ui).
+The project was previously deployed on Heroku but currently is not deployed anywhere. The repository of the UI is [this one](https://github.com/auhide/nnvis-ui).
 
 You can see a walkthrough video of the full project below:
 
