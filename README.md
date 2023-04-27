@@ -1,11 +1,7 @@
 # Multilayer Perceptron API Implemented From Scratch With NumPy
 The project was previously deployed on Heroku but currently is not deployed anywhere. The repository of the UI is [this one](https://github.com/auhide/nnvis-ui).
 
-You can see a walkthrough video of the full project below:
-
-<video width="100%" height="auto" controls>
-  <source src="static/neuroad-demo.mp4" type="video/mp4">
-</video>
+You can see a walkthrough video of the full project [here](https://youtu.be/3_6KJYapns4).
 
 ## Features
 ### Architecture tuning
